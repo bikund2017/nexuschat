@@ -1,0 +1,36 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/dist
+/dev-dist
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.parcel-cache
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editors
+Session.vim
+.vercel
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/e2e/screenshots/
+dist/
