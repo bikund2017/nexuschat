@@ -21,8 +21,10 @@ interface EmbedCodeDialogProps {
   roomName: string
 }
 
-const basePackageHomepage =
-  import.meta.env.VITE_HOMEPAGE ?? window.location.origin
+const basePackageHomepage = new URL(
+  import.meta.env.VITE_HOMEPAGE ?? '/',
+  window.location.origin
+).href
 const packageHomepage = basePackageHomepage.endsWith('/')
   ? basePackageHomepage
   : `${basePackageHomepage}/`
@@ -103,10 +105,7 @@ export const EmbedCodeDialog = ({
           }}
         >
           As an alternative to using an <code>iframe</code>, you can use the{' '}
-          <Link
-            href=""
-            target="_blank"
-          >
+          <Link href="" target="_blank">
             NexusChat SDK
           </Link>{' '}
           to embed a chat room as a{' '}

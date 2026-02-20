@@ -9,5 +9,6 @@ export enum routes {
 }
 
 export const homepageUrl = new URL(
-  import.meta.env.VITE_HOMEPAGE ?? '/'
+  import.meta.env.VITE_HOMEPAGE ?? '/',
+  window.location.origin
 )
