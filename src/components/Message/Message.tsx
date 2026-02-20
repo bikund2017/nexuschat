@@ -1,4 +1,4 @@
-import { HTMLAttributes, useState } from 'react'
+import { HTMLAttributes } from 'react'
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter'
 import YouTube from 'react-youtube'
 import Box from '@mui/material/Box'
@@ -10,8 +10,6 @@ import useTheme from '@mui/material/styles/useTheme'
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import Markdown, { ExtraProps } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import IconButton from '@mui/material/IconButton'
-import Chip from '@mui/material/Chip'
 
 import {
   InlineMedia as I_InlineMedia,
@@ -101,14 +99,13 @@ const isYouTubeLink = (message: IMessage) => {
   return typeof getYouTubeVideoId(message.text) === 'string'
 }
 
-const REACTION_EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🔥']
+
 
 export const Message = ({ message, showAuthor, userId }: MessageProps) => {
   const theme = useTheme()
   const isDark = theme.palette.mode === 'dark'
   const isSent = message.authorId === userId
-  const [showReactions, setShowReactions] = useState(false)
-  const [reactions, setReactions] = useState<string[]>([])
+
 
   let backgroundColor: string
   let bubbleStyles: Record<string, any> = {}
@@ -140,18 +137,11 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
     }
   }
 
-  const handleReactionClick = (emoji: string) => {
-    setReactions(prev =>
-      prev.includes(emoji) ? prev.filter(r => r !== emoji) : [...prev, emoji]
-    )
-    setShowReactions(false)
-  }
+
 
   return (
     <Box
       className="Message nexus-fade-in"
-      onMouseEnter={() => setShowReactions(true)}
-      onMouseLeave={() => setShowReactions(false)}
       sx={{ position: 'relative' }}
     >
       {showAuthor && (
@@ -240,87 +230,6 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
         </Box>
       </Tooltip>
 
-      {/* Reaction chips */}
-      {reactions.length > 0 && (
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 0.5,
-            justifyContent: isSent ? 'flex-end' : 'flex-start',
-            px: 1,
-            clear: 'both',
-          }}
-        >
-          {reactions.map((emoji, i) => (
-            <Chip
-              key={i}
-              label={emoji}
-              size="small"
-              onClick={() => handleReactionClick(emoji)}
-              sx={{
-                fontSize: '0.85rem',
-                height: 26,
-                cursor: 'pointer',
-                backgroundColor: isDark
-                  ? 'rgba(100, 116, 139, 0.15)'
-                  : 'rgba(100, 116, 139, 0.08)',
-                border: '1px solid rgba(100, 116, 139, 0.2)',
-                '&:hover': {
-                  backgroundColor: 'rgba(100, 116, 139, 0.25)',
-                },
-              }}
-            />
-          ))}
-        </Box>
-      )}
-
-      {/* Reaction picker on hover */}
-      {showReactions && (
-        <Box
-          className="nexus-scale-in"
-          sx={{
-            position: 'absolute',
-            bottom: -4,
-            [isSent ? 'right' : 'left']: 8,
-            display: 'flex',
-            gap: 0.25,
-            p: 0.5,
-            borderRadius: 3,
-            zIndex: 10,
-            backgroundColor: isDark
-              ? 'rgba(17, 22, 56, 0.95)'
-              : 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(10px)',
-            border: `1px solid ${isDark
-                ? 'rgba(100, 116, 139, 0.2)'
-                : 'rgba(0, 0, 0, 0.08)'
-              }`,
-            boxShadow: isDark
-              ? '0 4px 20px rgba(0, 0, 0, 0.3)'
-              : '0 4px 20px rgba(0, 0, 0, 0.1)',
-          }}
-        >
-          {REACTION_EMOJIS.map(emoji => (
-            <IconButton
-              key={emoji}
-              size="small"
-              onClick={() => handleReactionClick(emoji)}
-              sx={{
-                fontSize: '1rem',
-                width: 30,
-                height: 30,
-                transition: 'transform 0.15s ease',
-                '&:hover': {
-                  transform: 'scale(1.3)',
-                  backgroundColor: 'transparent',
-                },
-              }}
-            >
-              {emoji}
-            </IconButton>
-          ))}
-        </Box>
-      )}
     </Box>
   )
 }

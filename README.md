@@ -13,10 +13,6 @@ A secure, real-time peer-to-peer chat application built with React, TypeScript, 
 - 💬 **Real-Time Messaging** — Instant delivery with typing indicators
 - 📹 **Video & Audio Calls** — Built-in media sharing and screen sharing
 - 📁 **File Sharing** — Send files directly to peers
-- 🎨 **Collaborative Whiteboard** — Draw and share ideas in real-time
-- 📊 **In-Chat Polls** — Create polls for group decisions
-- 🎙️ **Voice Transcription** — Speech-to-text using Web Speech API
-- 🛡️ **Admin Controls** — Room management (mute, lock, slow mode)
 - 🌙 **Dark/Light Theme** — Premium glassmorphic UI design
 
 ## 🛠️ Tech Stack
@@ -28,7 +24,7 @@ A secure, real-time peer-to-peer chat application built with React, TypeScript, 
 | Material UI 5 | Component library |
 | WebRTC (Trystero) | Peer-to-peer communication |
 | Vite | Build tool & dev server |
-| Web Speech API | Voice transcription |
+| Web Speech API | Voice features |
 
 ## 🚀 Getting Started
 
@@ -89,12 +85,10 @@ Output will be in the `dist/` folder.
 ```
 src/
 ├── components/       # Reusable UI components
-│   ├── AdminControls/    # Room management
 │   ├── Message/          # Chat message bubbles
 │   ├── MessageForm/      # Message input
-│   ├── Poll/             # In-chat polls
 │   ├── Shell/            # App shell, drawer, app bar
-│   └── Whiteboard/       # Collaborative drawing
+│   └── Room/             # Room management
 ├── config/           # App configuration
 ├── contexts/         # React contexts
 ├── hooks/            # Custom hooks
