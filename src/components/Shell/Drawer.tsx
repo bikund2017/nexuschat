@@ -68,11 +68,7 @@ export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1.5 }}>
           <LogoIcon style={{ width: 28, height: 28 }} />
-          <Typography
-            variant="h6"
-            className="nexus-gradient-text"
-            sx={{ fontWeight: 700, fontSize: '1.1rem' }}
-          >
+          <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.1rem' }}>
             NexusChat
           </Typography>
         </Box>

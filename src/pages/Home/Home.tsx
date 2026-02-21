@@ -12,8 +12,6 @@ import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
-import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined'
-import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined'
 import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined'
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined'
@@ -336,7 +334,7 @@ export const Home = ({ userId }: HomeProps) => {
           <CommunityRoomSelector />
         </Box>
 
-        {/* Embed & Utility Controls */}
+        {/* Embed Control */}
         <Box
           sx={{
             display: 'flex',
@@ -358,30 +356,6 @@ export const Home = ({ userId }: HomeProps) => {
             }}
           >
             Embed
-          </Button>
-          <Button
-            variant="text"
-            size="small"
-            startIcon={<VisibilityOffOutlinedIcon />}
-            sx={{
-              textTransform: 'none',
-              color: 'text.secondary',
-              fontSize: '0.8rem',
-            }}
-          >
-            Stealth Mode
-          </Button>
-          <Button
-            variant="text"
-            size="small"
-            startIcon={<BoltOutlinedIcon />}
-            sx={{
-              textTransform: 'none',
-              color: 'text.secondary',
-              fontSize: '0.8rem',
-            }}
-          >
-            Quick Connect
           </Button>
         </Box>
       </Main>

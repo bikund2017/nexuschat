@@ -84,7 +84,7 @@ export function useRoomFileShare({
     if (!selfFileOfferMagnetUri) return
 
     // This sleep is needed to prevent this peer from not appearing on other
-    // peers' peer lists. This is because Trystero's interaction between
+    // peers' peer lists. The signaling library's interaction between
     // onPeerJoin and its actions is not totally compatible with React's
     // lifecycle hooks. In this case, the reference to peerList in
     // receiveFileOfferMetadata is out of date and prevents this peer from ever

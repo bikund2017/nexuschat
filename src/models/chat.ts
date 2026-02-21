@@ -1,8 +1,15 @@
+export enum DeliveryStatus {
+  SENDING = 'sending',
+  SENT = 'sent',
+  DELIVERED = 'delivered',
+}
+
 export interface UnsentMessage extends Record<string, any> {
   id: string
   text: string
   timeSent: number
   authorId: string
+  deliveryStatus?: DeliveryStatus
 }
 
 export interface ReceivedMessage extends UnsentMessage {
@@ -91,4 +98,8 @@ export interface FileOfferMetadata extends Record<string, any> {
 
 export interface TypingStatus extends Record<string, any> {
   isTyping: boolean
+}
+
+export interface DeliveryReceipt extends Record<string, any> {
+  messageId: string
 }

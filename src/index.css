@@ -43,28 +43,6 @@ pre {
   }
 }
 
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @keyframes pulse {
   0%,
   100% {
@@ -75,35 +53,10 @@ pre {
   }
 }
 
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 /* ===== Utilities ===== */
 
 .nexus-fade-in {
   animation: fadeIn 0.3s ease;
-}
-.nexus-slide-up {
-  animation: slideUp 0.3s ease;
-}
-.nexus-scale-in {
-  animation: scaleIn 0.2s ease;
-}
-
-.nexus-gradient-text {
-  color: inherit;
-}
-
-.nexus-card {
-  border-radius: 8px;
 }
 
 /* ===== Scrollbar ===== */

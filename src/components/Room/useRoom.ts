@@ -18,6 +18,8 @@ import { time } from 'lib/Time'
 import {
   AudioChannelName,
   AudioState,
+  DeliveryReceipt,
+  DeliveryStatus,
   FileOfferMetadata,
   InlineMedia,
   isInlineMedia,
@@ -389,6 +391,26 @@ export function useRoom(
         { ...message, timeReceived: timeService.now() },
       ])
       updatePeer(peerId, { isTypingGroupMessage: false })
+
+      // Send delivery receipt back to the sender
+      sendDeliveryReceipt({ messageId: message.id }, peerId)
+    },
+  })
+
+  const [sendDeliveryReceipt] = usePeerAction<DeliveryReceipt>({
+    namespace,
+    peerAction: PeerAction.DELIVERY_RCPT,
+    peerRoom,
+    onReceive: (receipt: DeliveryReceipt) => {
+      // Update the matching message's delivery status to DELIVERED
+      shellSetMessageLog(
+        messageLog.map(msg =>
+          msg.id === receipt.messageId
+            ? { ...msg, deliveryStatus: DeliveryStatus.DELIVERED }
+            : msg
+        ),
+        targetPeerId
+      )
     },
   })
 
@@ -435,6 +457,7 @@ export function useRoom(
       text: message,
       timeSent: timeService.now(),
       id: getUuid(),
+      deliveryStatus: DeliveryStatus.SENDING,
     }
 
     setIsTyping(false)
@@ -445,7 +468,11 @@ export function useRoom(
 
     setMessageLog([
       ...messageLog,
-      { ...unsentMessage, timeReceived: timeService.now() },
+      {
+        ...unsentMessage,
+        timeReceived: timeService.now(),
+        deliveryStatus: DeliveryStatus.SENT,
+      },
     ])
     setIsMessageSending(false)
   }

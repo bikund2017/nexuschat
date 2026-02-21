@@ -9,7 +9,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter'
 
 import Init from './Init'
-import reportWebVitals from './reportWebVitals'
 
 // NOTE: This is a workaround for MUI components attempting to access theme code
 // before it has loaded.
@@ -27,8 +26,3 @@ ReactDOM.createRoot(document.createElement('div')).render(
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(<Init />)
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()

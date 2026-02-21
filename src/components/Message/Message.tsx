@@ -14,6 +14,7 @@ import remarkGfm from 'remark-gfm'
 import {
   InlineMedia as I_InlineMedia,
   Message as IMessage,
+  DeliveryStatus,
   isMessageReceived,
   isInlineMedia,
 } from 'models/chat'
@@ -205,6 +206,43 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
             >
               {message.text}
             </StyledMarkdown>
+          )}
+          {isSent && !isInlineMedia(message) && (
+            <Box
+              component="span"
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                mt: 0.25,
+                fontSize: '0.7rem',
+                lineHeight: 1,
+                opacity: 0.7,
+                userSelect: 'none',
+              }}
+              aria-label={
+                message.deliveryStatus === DeliveryStatus.DELIVERED
+                  ? 'Delivered'
+                  : message.deliveryStatus === DeliveryStatus.SENT
+                    ? 'Sent'
+                    : 'Sending'
+              }
+            >
+              {message.deliveryStatus === DeliveryStatus.DELIVERED ? (
+                <Tooltip title="Delivered" placement="bottom">
+                  <span style={{ letterSpacing: '-3px', fontWeight: 700 }}>
+                    ✓✓
+                  </span>
+                </Tooltip>
+              ) : message.deliveryStatus === DeliveryStatus.SENT ? (
+                <Tooltip title="Sent" placement="bottom">
+                  <span style={{ fontWeight: 700 }}>✓</span>
+                </Tooltip>
+              ) : (
+                <Tooltip title="Sending..." placement="bottom">
+                  <span style={{ fontWeight: 400 }}>○</span>
+                </Tooltip>
+              )}
+            </Box>
           )}
         </Box>
       </Tooltip>

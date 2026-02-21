@@ -1,7 +1,7 @@
-// NOTE: Much of what's here is derived from various ChatGPT responses:
-//
-//  - https://gist.github.com/jeremyckahn/cbb6107e7de6c83b620960a19266055e
-//  - https://gist.github.com/jeremyckahn/c49ca17a849ecf35c5f957ffde956cf4
+// Web Crypto API utilities for RSA-OAEP encryption.
+// References:
+//  - https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto
+//  - https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/generateKey
 
 export enum AllowedKeyType {
   PUBLIC,

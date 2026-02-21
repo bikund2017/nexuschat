@@ -138,7 +138,6 @@ export const ShellAppBar = ({
                     variant="h6"
                     noWrap
                     component="div"
-                    className="nexus-gradient-text"
                     sx={{
                       fontWeight: 700,
                       letterSpacing: '-0.01em',
