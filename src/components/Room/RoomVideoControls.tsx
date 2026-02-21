@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
 import Videocam from '@mui/icons-material/Videocam'
 import VideocamOff from '@mui/icons-material/VideocamOff'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
+import CameraswitchOutlined from '@mui/icons-material/CameraswitchOutlined'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import ListItemText from '@mui/material/ListItemText'
 import Tooltip from '@mui/material/Tooltip'
 
 import { PeerRoom } from 'lib/PeerRoom'
@@ -72,28 +72,22 @@ export function RoomVideoControls({ peerRoom }: RoomVideoControlsProps) {
           {isCameraEnabled ? <Videocam /> : <VideocamOff />}
         </MediaButton>
       </Tooltip>
-      {videoDevices.length > 0 && isCameraEnabled && (
-        <Box sx={{ mt: 1 }}>
-          <List
-            component="nav"
-            aria-label="Camera selection"
-            sx={{ bgcolor: 'background.paper' }}
-          >
-            <ListItem
-              button
+      {videoDevices.length > 1 && isCameraEnabled && (
+        <>
+          <Tooltip title="Switch camera">
+            <IconButton
+              size="small"
               id="video-input-select-button"
               aria-haspopup="listbox"
               aria-controls="video-input-select-menu"
-              aria-label="Camera to use"
+              aria-label="Switch camera"
               aria-expanded={isVideoDeviceSelectOpen ? 'true' : undefined}
               onClick={handleVideoDeviceListItemClick}
+              sx={{ mt: 0.5 }}
             >
-              <ListItemText
-                primary="Selected camera"
-                secondary={videoDevices[selectedVideoDeviceIdx]?.label}
-              />
-            </ListItem>
-          </List>
+              <CameraswitchOutlined fontSize="small" />
+            </IconButton>
+          </Tooltip>
           <Menu
             id="video-input-select-menu"
             anchorEl={videoAnchorEl}
@@ -110,11 +104,11 @@ export function RoomVideoControls({ peerRoom }: RoomVideoControlsProps) {
                 selected={idx === selectedVideoDeviceIdx}
                 onClick={event => handleVideoDeviceMenuItemClick(event, idx)}
               >
-                {videoDevice.label}
+                <ListItemText primary={videoDevice.label} />
               </MenuItem>
             ))}
           </Menu>
-        </Box>
+        </>
       )}
     </Box>
   )
