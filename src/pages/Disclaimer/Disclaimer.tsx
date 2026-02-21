@@ -26,12 +26,9 @@ const DisclaimerSection = ({
       sx={{
         p: 3,
         mb: 2,
-        borderRadius: 3,
-        background: isDark
-          ? 'rgba(30, 41, 59, 0.5)'
-          : 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(12px)',
-        border: `1px solid ${isDark ? 'rgba(100, 116, 139, 0.1)' : 'rgba(100, 116, 139, 0.06)'}`,
+        borderRadius: 2,
+        background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
+        border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
@@ -44,9 +41,9 @@ const DisclaimerSection = ({
             height: 36,
             borderRadius: 2,
             background: isDark
-              ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(100, 116, 139, 0.08))'
-              : 'linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(100, 116, 139, 0.04))',
-            color: isDark ? '#38BDF8' : '#0284C7',
+              ? 'rgba(255, 255, 255, 0.06)'
+              : 'rgba(0, 0, 0, 0.04)',
+            color: isDark ? '#D4D4D4' : '#404040',
           }}
         >
           {icon}
@@ -91,9 +88,7 @@ export const Disclaimer = () => {
           sx={{
             fontWeight: 800,
             mb: 1,
-            background: 'linear-gradient(135deg, #64748B 20%, #38BDF8 80%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            color: theme.palette.mode === 'dark' ? '#FFFFFF' : '#171717',
           }}
         >
           Disclaimer
@@ -107,37 +102,41 @@ export const Disclaimer = () => {
         icon={<GavelOutlinedIcon fontSize="small" />}
         title="General"
       >
-        The information contained on this Service is for general information purposes only.
-        The Project assumes no responsibility for errors or omissions. In no event shall the
-        Project be liable for any special, direct, indirect, consequential, or incidental damages
-        arising out of or in connection with the use of the Service.
+        The information contained on this Service is for general information
+        purposes only. The Project assumes no responsibility for errors or
+        omissions. In no event shall the Project be liable for any special,
+        direct, indirect, consequential, or incidental damages arising out of or
+        in connection with the use of the Service.
       </DisclaimerSection>
 
       <DisclaimerSection
         icon={<ShieldOutlinedIcon fontSize="small" />}
         title="Privacy"
       >
-        NexusChat is a peer-to-peer application. No messages, files, or media are stored on any
-        server. All communication is encrypted end-to-end and exists only in volatile memory
-        during your session. Once you close the page, all data is permanently erased.
+        NexusChat is a peer-to-peer application. No messages, files, or media
+        are stored on any server. All communication is encrypted end-to-end and
+        exists only in volatile memory during your session. Once you close the
+        page, all data is permanently erased.
       </DisclaimerSection>
 
       <DisclaimerSection
         icon={<WarningAmberOutlinedIcon fontSize="small" />}
         title="No Warranty"
       >
-        All information in the Service is provided "as is", with no guarantee of completeness,
-        accuracy, or timeliness, and without warranty of any kind, express or implied, including
-        but not limited to warranties of performance, merchantability, and fitness for a particular purpose.
+        All information in the Service is provided "as is", with no guarantee of
+        completeness, accuracy, or timeliness, and without warranty of any kind,
+        express or implied, including but not limited to warranties of
+        performance, merchantability, and fitness for a particular purpose.
       </DisclaimerSection>
 
       <DisclaimerSection
         icon={<PersonOutlineIcon fontSize="small" />}
         title="User Responsibility"
       >
-        Messages sent by users are their sole responsibility. The Project is not liable for any
-        content shared through the Service. Users take full responsibility for any content they
-        create or share during their sessions.
+        Messages sent by users are their sole responsibility. The Project is not
+        liable for any content shared through the Service. Users take full
+        responsibility for any content they create or share during their
+        sessions.
       </DisclaimerSection>
     </Box>
   )

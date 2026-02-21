@@ -20,6 +20,7 @@ import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined'
 import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined'
 import CloudOffOutlinedIcon from '@mui/icons-material/CloudOffOutlined'
 
+import LogoIcon from 'img/icon.svg?react'
 import { Form, Main } from 'components/Elements'
 import { PeerNameDisplay } from 'components/PeerNameDisplay'
 import { SettingsContext } from 'contexts/SettingsContext'
@@ -50,24 +51,11 @@ const FeatureCard = ({
       sx={{
         flex: '1 1 200px',
         p: 3,
-        borderRadius: 3,
+        borderRadius: 2,
         textAlign: 'center',
-        background: isDark
-          ? 'rgba(30, 41, 59, 0.5)'
-          : 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(12px)',
-        border: `1px solid ${isDark ? 'rgba(100, 116, 139, 0.12)' : 'rgba(100, 116, 139, 0.08)'}`,
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
+        border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
         cursor: 'default',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: isDark
-            ? '0 12px 40px rgba(56, 189, 248, 0.12)'
-            : '0 12px 40px rgba(100, 116, 139, 0.12)',
-          borderColor: isDark
-            ? 'rgba(56, 189, 248, 0.25)'
-            : 'rgba(100, 116, 139, 0.2)',
-        },
       }}
     >
       <Box
@@ -77,9 +65,9 @@ const FeatureCard = ({
           borderRadius: 2,
           mb: 1.5,
           background: isDark
-            ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(100, 116, 139, 0.1))'
-            : 'linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(100, 116, 139, 0.05))',
-          color: isDark ? '#38BDF8' : '#0284C7',
+            ? 'rgba(255, 255, 255, 0.06)'
+            : 'rgba(0, 0, 0, 0.04)',
+          color: isDark ? '#D4D4D4' : '#404040',
         }}
       >
         {icon}
@@ -87,7 +75,11 @@ const FeatureCard = ({
       <Typography variant="subtitle1" fontWeight={600} gutterBottom>
         {title}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ lineHeight: 1.6 }}
+      >
         {description}
       </Typography>
     </Box>
@@ -135,21 +127,32 @@ export const Home = ({ userId }: HomeProps) => {
         {/* Hero Section */}
         <Box
           sx={{
-            py: { xs: 4, md: 6 },
+            py: { xs: 5, md: 7 },
             px: 2,
-            animation: 'fadeIn 0.6s ease-out',
+            animation: 'fadeIn 0.5s ease-out',
           }}
         >
+          <Box
+            sx={{
+              display: 'inline-flex',
+              mb: 3,
+              p: 2,
+              borderRadius: 3,
+              background: isDark
+                ? 'rgba(255, 255, 255, 0.04)'
+                : 'rgba(0, 0, 0, 0.03)',
+            }}
+          >
+            <LogoIcon style={{ width: 56, height: 56 }} />
+          </Box>
           <Typography
             variant="h3"
             component="h1"
             sx={{
               fontWeight: 800,
               mb: 2,
-              background: 'linear-gradient(135deg, #64748B 20%, #38BDF8 80%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontSize: { xs: '2rem', md: '2.8rem' },
+              color: isDark ? '#FFFFFF' : '#171717',
+              fontSize: { xs: '2.2rem', md: '3rem' },
               letterSpacing: '-0.03em',
             }}
           >
@@ -159,9 +162,9 @@ export const Home = ({ userId }: HomeProps) => {
             variant="h6"
             color="text.secondary"
             sx={{
-              maxWidth: 500,
+              maxWidth: 480,
               mx: 'auto',
-              mb: 1,
+              mb: 1.5,
               fontWeight: 400,
               fontSize: { xs: '0.95rem', md: '1.1rem' },
               lineHeight: 1.7,
@@ -188,25 +191,16 @@ export const Home = ({ userId }: HomeProps) => {
           sx={{
             maxWidth: 480,
             mx: 'auto',
-            mb: 5,
+            mb: 6,
             p: { xs: 3, md: 4 },
-            borderRadius: 4,
-            background: isDark
-              ? 'rgba(30, 41, 59, 0.5)'
-              : 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(20px)',
-            border: `1px solid ${isDark ? 'rgba(100, 116, 139, 0.12)' : 'rgba(100, 116, 139, 0.08)'}`,
-            boxShadow: isDark
-              ? '0 8px 32px rgba(0, 0, 0, 0.3)'
-              : '0 8px 32px rgba(100, 116, 139, 0.08)',
-            animation: 'slideUp 0.5s ease-out',
+            borderRadius: 3,
+            background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
+            border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
+            boxShadow: isDark ? 'none' : '0 1px 3px rgba(0, 0, 0, 0.04)',
+            animation: 'slideUp 0.45s ease-out',
           }}
         >
-          <Typography
-            variant="h6"
-            fontWeight={600}
-            sx={{ mb: 3 }}
-          >
+          <Typography variant="h6" fontWeight={600} sx={{ mb: 3 }}>
             Create or Join a Room
           </Typography>
 
@@ -246,7 +240,10 @@ export const Home = ({ userId }: HomeProps) => {
                   size="small"
                   sx={{
                     color: 'secondary.main',
-                    '&:hover': { transform: 'rotate(180deg)', transition: 'transform 0.3s' },
+                    '&:hover': {
+                      transform: 'rotate(180deg)',
+                      transition: 'transform 0.3s',
+                    },
                   }}
                 >
                   <Cached />
@@ -262,14 +259,9 @@ export const Home = ({ userId }: HomeProps) => {
                 onClick={handleJoinPublicRoomClick}
                 sx={{
                   py: 1.5,
-                  borderRadius: 3,
+                  borderRadius: 2,
                   fontWeight: 600,
                   fontSize: '0.85rem',
-                  background: 'linear-gradient(135deg, #475569, #64748B)',
-                  '&:hover': {
-                    background: 'linear-gradient(135deg, #334155, #475569)',
-                    boxShadow: '0 6px 24px rgba(56, 189, 248, 0.2)',
-                  },
                 }}
               >
                 Join Public
@@ -282,7 +274,7 @@ export const Home = ({ userId }: HomeProps) => {
                 onClick={handleJoinPrivateRoomClick}
                 sx={{
                   py: 1.5,
-                  borderRadius: 3,
+                  borderRadius: 2,
                   fontWeight: 600,
                   fontSize: '0.85rem',
                 }}
@@ -298,7 +290,13 @@ export const Home = ({ userId }: HomeProps) => {
           <Typography
             variant="subtitle1"
             fontWeight={600}
-            sx={{ mb: 3, opacity: 0.7, letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: '0.75rem' }}
+            sx={{
+              mb: 3,
+              opacity: 0.7,
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              fontSize: '0.75rem',
+            }}
           >
             Why NexusChat?
           </Typography>
@@ -353,7 +351,11 @@ export const Home = ({ userId }: HomeProps) => {
             size="small"
             startIcon={<CodeOutlinedIcon />}
             onClick={handleGetEmbedCodeClick}
-            sx={{ textTransform: 'none', color: 'text.secondary', fontSize: '0.8rem' }}
+            sx={{
+              textTransform: 'none',
+              color: 'text.secondary',
+              fontSize: '0.8rem',
+            }}
           >
             Embed
           </Button>
@@ -361,7 +363,11 @@ export const Home = ({ userId }: HomeProps) => {
             variant="text"
             size="small"
             startIcon={<VisibilityOffOutlinedIcon />}
-            sx={{ textTransform: 'none', color: 'text.secondary', fontSize: '0.8rem' }}
+            sx={{
+              textTransform: 'none',
+              color: 'text.secondary',
+              fontSize: '0.8rem',
+            }}
           >
             Stealth Mode
           </Button>
@@ -369,7 +375,11 @@ export const Home = ({ userId }: HomeProps) => {
             variant="text"
             size="small"
             startIcon={<BoltOutlinedIcon />}
-            sx={{ textTransform: 'none', color: 'text.secondary', fontSize: '0.8rem' }}
+            sx={{
+              textTransform: 'none',
+              color: 'text.secondary',
+              fontSize: '0.8rem',
+            }}
           >
             Quick Connect
           </Button>

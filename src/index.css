@@ -1,102 +1,141 @@
-/* ===== NexusChat Global Styles — Minimal Slate ===== */
+/* ===== NexusChat — Clean Minimal ===== */
 
-/* Reset */
 a {
   color: inherit;
   text-decoration: inherit;
 }
 
-blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
   margin: 0;
 }
 
 /* ===== Animations ===== */
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.15); }
-  50% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.3), 0 0 40px rgba(56, 189, 248, 0.08); }
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* ===== Utilities ===== */
+
+.nexus-fade-in {
+  animation: fadeIn 0.3s ease;
 }
-
-/* ===== Utility Classes ===== */
-
-.nexus-fade-in { animation: fadeIn 0.4s ease-out; }
-.nexus-slide-up { animation: slideUp 0.5s ease-out; }
-.nexus-scale-in { animation: scaleIn 0.3s ease-out; }
-.nexus-glow { animation: glow 3s ease-in-out infinite; }
+.nexus-slide-up {
+  animation: slideUp 0.3s ease;
+}
+.nexus-scale-in {
+  animation: scaleIn 0.2s ease;
+}
 
 .nexus-gradient-text {
-  background: linear-gradient(135deg, #64748B, #38BDF8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: inherit;
 }
 
-.nexus-glass {
-  background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(100, 116, 139, 0.1);
-  border-radius: 16px;
+.nexus-card {
+  border-radius: 8px;
 }
 
 /* ===== Scrollbar ===== */
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.3); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.5); }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.35);
+}
 
 /* ===== Selection ===== */
-::selection { background: rgba(56, 189, 248, 0.25); color: #E2E8F0; }
+::selection {
+  background: rgba(0, 0, 0, 0.12);
+}
 
-/* ===== Smooth Transitions ===== */
-* { scrollbar-width: thin; scrollbar-color: rgba(100, 116, 139, 0.3) transparent; }
+/* ===== Scroll ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(128, 128, 128, 0.2) transparent;
+}
 
-/* ===== Focus Styles ===== */
-*:focus-visible { outline: 2px solid rgba(56, 189, 248, 0.4); outline-offset: 2px; }
+/* ===== Focus ===== */
+*:focus-visible {
+  outline: 2px solid #737373;
+  outline-offset: 2px;
+}

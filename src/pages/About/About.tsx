@@ -7,10 +7,9 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined'
 import CloudOffOutlinedIcon from '@mui/icons-material/CloudOffOutlined'
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined'
-import BrushOutlinedIcon from '@mui/icons-material/BrushOutlined'
-import PollOutlinedIcon from '@mui/icons-material/PollOutlined'
 
 import { ShellContext } from 'contexts/ShellContext'
+import LogoIcon from 'img/icon.svg?react'
 import {
   messageTranscriptSizeLimit,
   messageCharacterSizeLimit,
@@ -41,19 +40,9 @@ const FeatureItem = ({
         display: 'flex',
         gap: 2,
         p: 2.5,
-        borderRadius: 3,
-        background: isDark
-          ? 'rgba(30, 41, 59, 0.5)'
-          : 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(12px)',
-        border: `1px solid ${isDark ? 'rgba(100, 116, 139, 0.1)' : 'rgba(100, 116, 139, 0.06)'}`,
-        transition: 'all 0.2s ease',
-        '&:hover': {
-          borderColor: isDark
-            ? 'rgba(56, 189, 248, 0.2)'
-            : 'rgba(100, 116, 139, 0.15)',
-          transform: 'translateX(4px)',
-        },
+        borderRadius: 2,
+        background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
+        border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
       }}
     >
       <Box
@@ -66,9 +55,9 @@ const FeatureItem = ({
           borderRadius: 2,
           flexShrink: 0,
           background: isDark
-            ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(100, 116, 139, 0.08))'
-            : 'linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(100, 116, 139, 0.04))',
-          color: isDark ? '#38BDF8' : '#0284C7',
+            ? 'rgba(255, 255, 255, 0.06)'
+            : 'rgba(0, 0, 0, 0.04)',
+          color: isDark ? '#D4D4D4' : '#404040',
         }}
       >
         {icon}
@@ -77,7 +66,11 @@ const FeatureItem = ({
         <Typography variant="subtitle2" fontWeight={600}>
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ lineHeight: 1.6 }}
+        >
           {description}
         </Typography>
       </Box>
@@ -98,20 +91,13 @@ const InfoCard = ({
     <Box
       sx={{
         p: 3,
-        borderRadius: 3,
+        borderRadius: 2,
         mb: 2,
-        background: isDark
-          ? 'rgba(30, 41, 59, 0.5)'
-          : 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(12px)',
-        border: `1px solid ${isDark ? 'rgba(100, 116, 139, 0.1)' : 'rgba(100, 116, 139, 0.06)'}`,
+        background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
+        border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
       }}
     >
-      <Typography
-        variant="subtitle1"
-        fontWeight={700}
-        sx={{ mb: 1.5 }}
-      >
+      <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 1.5 }}>
         {title}
       </Typography>
       {children}
@@ -122,6 +108,7 @@ const InfoCard = ({
 export const About = () => {
   const { setTitle } = useContext(ShellContext)
   const theme = useTheme()
+  const isDark = theme.palette.mode === 'dark'
 
   useEffect(() => {
     setTitle('About')
@@ -139,20 +126,36 @@ export const About = () => {
     >
       {/* Header */}
       <Box sx={{ textAlign: 'center', mb: 4, pt: 2 }}>
+        <Box
+          sx={{
+            display: 'inline-flex',
+            mb: 1.5,
+            p: 2,
+            borderRadius: 3,
+            background: isDark
+              ? 'rgba(255, 255, 255, 0.04)'
+              : 'rgba(0, 0, 0, 0.03)',
+          }}
+        >
+          <LogoIcon style={{ width: 48, height: 48 }} />
+        </Box>
         <Typography
           variant="h4"
           sx={{
             fontWeight: 800,
             mb: 1,
-            background: 'linear-gradient(135deg, #64748B 20%, #38BDF8 80%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            color: isDark ? '#FFFFFF' : '#171717',
           }}
         >
           About NexusChat
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 500, mx: 'auto' }}>
-          A secure, peer-to-peer communication platform built with privacy as the foundation.
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ maxWidth: 500, mx: 'auto' }}
+        >
+          A secure, peer-to-peer communication platform built with privacy as
+          the foundation.
         </Typography>
       </Box>
 
@@ -160,7 +163,12 @@ export const About = () => {
       <Typography
         variant="overline"
         color="text.secondary"
-        sx={{ display: 'block', mb: 2, fontWeight: 600, letterSpacing: '0.1em' }}
+        sx={{
+          display: 'block',
+          mb: 2,
+          fontWeight: 600,
+          letterSpacing: '0.1em',
+        }}
       >
         Key Features
       </Typography>
@@ -185,39 +193,46 @@ export const About = () => {
           title="Video & Audio Calls"
           description="Built-in media sharing with screen sharing and file transfer capabilities."
         />
-        <FeatureItem
-          icon={<BrushOutlinedIcon fontSize="small" />}
-          title="Collaborative Whiteboard"
-          description="Draw and share ideas in real-time with a full-featured collaborative whiteboard."
-        />
-        <FeatureItem
-          icon={<PollOutlinedIcon fontSize="small" />}
-          title="In-Chat Polls"
-          description="Create polls for group decisions with live voting results."
-        />
       </Box>
 
       {/* Info Cards */}
       <InfoCard title="Chat Rooms">
-        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-          <strong>Public rooms</strong> can be joined by anyone with the URL. By default, rooms get random,
-          unguessable names. <strong>Private rooms</strong> require all participants to enter the same password.
-          No error is shown for password mismatches — peers simply cannot connect.
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ lineHeight: 1.7 }}
+        >
+          <strong>Public rooms</strong> can be joined by anyone with the URL. By
+          default, rooms get random, unguessable names.{' '}
+          <strong>Private rooms</strong> require all participants to enter the
+          same password. No error is shown for password mismatches — peers
+          simply cannot connect.
         </Typography>
       </InfoCard>
 
       <InfoCard title="Peer Verification">
-        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-          NexusChat uses public-key cryptography to verify peers. All keys are generated locally.
-          Share your public key freely — it's not sensitive. Your private key never leaves your device.
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ lineHeight: 1.7 }}
+        >
+          NexusChat uses public-key cryptography to verify peers. All keys are
+          generated locally. Share your public key freely — it's not sensitive.
+          Your private key never leaves your device.
         </Typography>
       </InfoCard>
 
       <InfoCard title="Conversations">
-        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-          Transcripts are erased from memory when you close the page. In public rooms, new peers
-          receive the existing transcript on join. History is limited to {messageTranscriptSizeLimitFormatted} messages.
-          Messages support Markdown with syntax highlighting. Max message size: {messageCharacterSizeLimitFormatted} characters.
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ lineHeight: 1.7 }}
+        >
+          Transcripts are erased from memory when you close the page. In public
+          rooms, new peers receive the existing transcript on join. History is
+          limited to {messageTranscriptSizeLimitFormatted} messages. Messages
+          support Markdown with syntax highlighting. Max message size:{' '}
+          {messageCharacterSizeLimitFormatted} characters.
         </Typography>
       </InfoCard>
     </Box>

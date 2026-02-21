@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 512 512">
+  <!-- Chat bubble body -->
+  <rect x="56" y="68" width="400" height="280" rx="50" ry="50" fill="#171717"/>
+  <!-- Chat bubble tail -->
+  <polygon points="106,348 56,440 196,348" fill="#171717"/>
+  <!-- Letter N -->
+  <path d="M 156,148 L 156,288 L 200,288 L 200,216 L 312,288 L 356,288 L 356,148 L 312,148 L 312,220 L 200,148 Z" fill="white"/>
+</svg>

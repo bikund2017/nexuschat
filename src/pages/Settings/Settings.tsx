@@ -61,17 +61,14 @@ const SectionHeader = ({
           height: 36,
           borderRadius: 2,
           background: isDark
-            ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(100, 116, 139, 0.1))'
-            : 'linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(100, 116, 139, 0.05))',
-          color: isDark ? '#38BDF8' : '#0284C7',
+            ? 'rgba(255, 255, 255, 0.06)'
+            : 'rgba(0, 0, 0, 0.04)',
+          color: isDark ? '#D4D4D4' : '#404040',
         }}
       >
         {icon}
       </Box>
-      <Typography
-        variant="h6"
-        sx={{ fontWeight: 700, fontSize: '1.1rem' }}
-      >
+      <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.1rem' }}>
         {title}
       </Typography>
     </Box>
@@ -87,13 +84,9 @@ const SettingsCard = ({ children }: { children: React.ReactNode }) => {
       sx={{
         p: 3,
         mb: 2,
-        borderRadius: 3,
-        background: isDark
-          ? 'rgba(30, 41, 59, 0.5)'
-          : 'rgba(255, 255, 255, 0.9)',
-        backdropFilter: 'blur(12px)',
-        border: `1px solid ${isDark ? 'rgba(100, 116, 139, 0.12)' : 'rgba(100, 116, 139, 0.08)'}`,
-        transition: 'all 0.2s ease',
+        borderRadius: 2,
+        background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
+        border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
       }}
     >
       {children}
@@ -122,7 +115,7 @@ export const Settings = ({ userId }: SettingsProps) => {
   const persistedStorage = getPersistedStorage()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       await notification.requestPermission()
       setIsNotificationPermissionDetermined(true)
     })()
@@ -298,7 +291,9 @@ export const Settings = ({ userId }: SettingsProps) => {
       />
 
       <SettingsCard>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, mb: 2 }}>
+        <Box
+          sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, mb: 2 }}
+        >
           <FileUploadOutlinedIcon sx={{ color: 'secondary.main', mt: 0.3 }} />
           <Box>
             <Typography variant="subtitle2" fontWeight={600}>
@@ -320,7 +315,9 @@ export const Settings = ({ userId }: SettingsProps) => {
       </SettingsCard>
 
       <SettingsCard>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, mb: 2 }}>
+        <Box
+          sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, mb: 2 }}
+        >
           <FileDownloadOutlinedIcon sx={{ color: 'warning.main', mt: 0.3 }} />
           <Box>
             <Typography variant="subtitle2" fontWeight={600}>
@@ -351,7 +348,9 @@ export const Settings = ({ userId }: SettingsProps) => {
       </SettingsCard>
 
       <SettingsCard>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, mb: 2 }}>
+        <Box
+          sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, mb: 2 }}
+        >
           <DeleteOutlineIcon sx={{ color: 'error.main', mt: 0.3 }} />
           <Box>
             <Typography variant="subtitle2" fontWeight={600}>
@@ -360,13 +359,11 @@ export const Settings = ({ userId }: SettingsProps) => {
             <Typography variant="caption" color="text.secondary">
               This will reset your username from{' '}
               <strong>
-                <PeerNameDisplay
-                  sx={{ fontWeight: 600 }}
-                >
+                <PeerNameDisplay sx={{ fontWeight: 600 }}>
                   {userId}
                 </PeerNameDisplay>
-              </strong>
-              {' '}to a random name and clear all preferences.
+              </strong>{' '}
+              to a random name and clear all preferences.
             </Typography>
           </Box>
         </Box>
@@ -390,9 +387,16 @@ export const Settings = ({ userId }: SettingsProps) => {
       <Typography
         variant="caption"
         color="text.secondary"
-        sx={{ display: 'block', mt: 2, mb: 4, opacity: 0.5, textAlign: 'center' }}
+        sx={{
+          display: 'block',
+          mt: 2,
+          mb: 4,
+          opacity: 0.5,
+          textAlign: 'center',
+        }}
       >
-        NexusChat stores preferences locally. No message content is ever persisted.
+        NexusChat stores preferences locally. No message content is ever
+        persisted.
       </Typography>
     </Box>
   )
