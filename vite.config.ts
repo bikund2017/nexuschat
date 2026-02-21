@@ -9,6 +9,7 @@ import svgr from 'vite-plugin-svgr'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import macrosPlugin from 'vite-plugin-babel-macros'
 import { VitePWA } from 'vite-plugin-pwa'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
 import { manifest } from './manifest'
 import { RouterType } from './src/models/router'
@@ -38,6 +39,8 @@ const config = () => {
     // without a custom domain. Replace 'nexuschat' with your repo name if different.
     // base: '/nexuschat/',
     server: {
+      https: true,
+      host: true,
       proxy: {
         '/api': {
           target: process.env.IS_E2E_TEST
@@ -55,6 +58,7 @@ const config = () => {
       sourcemap: true,
     },
     plugins: [
+      basicSsl(),
       svgr({
         include: '**/*.svg?react',
       }),
