@@ -47,7 +47,7 @@ npm install
 npm start
 ```
 
-Open [http://localhost:3001](http://localhost:3001) in your browser.
+Open [http://localhost:3002](http://localhost:3002) in your browser.
 
 ### Production Build
 
@@ -62,7 +62,7 @@ Output will be in the `dist/` folder.
 1. Open the app and create a room (public or private)
 2. Share the room URL with your peers
 3. Start chatting! Messages are encrypted end-to-end
-4. Use the whiteboard, polls, and voice transcription features
+4. Use the voice transcription and other features
 
 ## 🏗️ Architecture
 
@@ -100,7 +100,3 @@ src/
 │   └── Settings/         # User preferences
 └── services/         # Business logic
 ```
-
-## 📄 License
-
-GPL-2.0-or-later

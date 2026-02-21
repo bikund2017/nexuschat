@@ -24,8 +24,8 @@ export const manifest: Partial<ManifestOptions> = {
   ],
   start_url: './',
   display: 'fullscreen',
-  theme_color: '#64748B',
-  background_color: '#0F172A',
+  theme_color: '#171717',
+  background_color: '#0A0A0A',
   screenshots: [
     {
       src: 'screenshots/home-desktop.png',
