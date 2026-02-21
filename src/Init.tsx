@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { Analytics } from '@vercel/analytics/react'
 import { v4 as uuid } from 'uuid'
 
 import { encryption } from 'services/Encryption'
@@ -82,6 +83,7 @@ const Init = ({ getUuid = uuid, ...props }: InitProps) => {
   return (
     <Suspense fallback={<WholePageLoading />}>
       <Bootstrap {...props} initialUserSettings={userSettings} />
+      <Analytics />
     </Suspense>
   )
 }
