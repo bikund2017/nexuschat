@@ -6,7 +6,7 @@
  * RTC Configuration Generator
  *
  * This script helps generate the base64-encoded RTC_CONFIG environment variable
- * needed for the Chitchatter API endpoint. It creates a properly formatted
+ * needed for the NexusChat API endpoint. It creates a properly formatted
  * RTCConfiguration object and encodes it for use in deployment environments.
  */
 
@@ -161,7 +161,7 @@ async function generateConfig() {
   console.log(colorize('🚀 RTC Configuration Generator', 'bold'))
   console.log(colorize('=====================================', 'blue'))
   console.log(
-    'This tool helps you create the RTC_CONFIG environment variable for Chitchatter.'
+    'This tool helps you create the RTC_CONFIG environment variable for NexusChat.'
   )
   console.log('The configuration will include TURN servers.\n')
 
@@ -245,7 +245,7 @@ if (args.includes('--help') || args.includes('-h')) {
   console.log(
     '\nThis tool generates base64-encoded RTC_CONFIG environment variables'
   )
-  console.log('for use with the Chitchatter API endpoint.')
+  console.log('for use with the NexusChat API endpoint.')
   process.exit(0)
 }
 
