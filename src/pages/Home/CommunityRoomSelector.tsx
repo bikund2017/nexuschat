@@ -28,33 +28,45 @@ export const CommunityRoomSelector = () => {
   }
 
   return (
-    <Accordion>
+    <Accordion
+      sx={{
+        '&.MuiAccordion-root': {
+          borderRadius: 2,
+        },
+      }}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1-content"
         id="panel1-header"
         sx={{
           fontWeight: 'bold',
+          minHeight: { xs: 40, sm: 48 },
+          '& .MuiAccordionSummary-content': {
+            my: { xs: 0.75, sm: 1.5 },
+          },
         }}
       >
         Community rooms
       </AccordionSummary>
-      <AccordionDetails>
-        <Typography variant="body1">
+      <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1, sm: 2 } }}>
+        <Typography variant="body2" sx={{ mb: 1.5 }}>
           You can also chat in a public community room. You'll be anonymous, but
           be careful what information you choose to share.
         </Typography>
-        <Box display="flex" mt={2} gap={1}>
+        <Box display="flex" gap={1} alignItems="center">
           <Autocomplete
             disablePortal
             options={communityRoomNames}
             value={selectedRoom}
+            size="small"
             renderInput={params => <TextField {...params} label="Room" />}
             onChange={handleRoomNameChange}
             sx={{ flexGrow: 1 }}
           />
           <Button
             variant="contained"
+            size="small"
             disabled={selectedRoom === null}
             onClick={handleJoinClick}
           >

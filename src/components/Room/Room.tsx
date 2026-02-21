@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box'
-import Divider from '@mui/material/Divider'
 import useTheme from '@mui/material/styles/useTheme'
 import Zoom from '@mui/material/Zoom'
 import { useWindowSize } from '@react-hook/window-size'
@@ -136,6 +135,7 @@ const RoomCore = ({
                   height: 0,
                   position: 'relative',
                   top: theme.spacing(1),
+                  gap: { xs: 0, sm: 0 },
                 }}
               >
                 <RoomAudioControls peerRoom={peerRoom} />
@@ -184,7 +184,6 @@ const RoomCore = ({
                   userId={userId}
                   sx={{ ...(isDirectMessageRoom && { pt: 1 }) }}
                 />
-                <Divider />
                 <Box>
                   <MessageForm
                     onMessageSubmit={handleMessageSubmit}

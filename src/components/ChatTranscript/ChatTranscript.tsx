@@ -18,6 +18,7 @@ export const ChatTranscript = ({
 }: ChatTranscriptProps) => {
   const { showRoomControls } = useContext(ShellContext)
   const theme = useTheme()
+  const isDark = theme.palette.mode === 'dark'
   const boxRef = useRef<HTMLDivElement>(null)
   const [previousMessageLogLength, setPreviousMessageLogLength] = useState(0)
 
@@ -56,12 +57,6 @@ export const ChatTranscript = ({
     setPreviousMessageLogLength(messageLog.length)
   }, [messageLog.length])
 
-  const transcriptMaxWidth = theme.breakpoints.values.md
-  const transcriptPaddingX = `(50% - ${
-    transcriptMaxWidth / 2
-  }px) - ${theme.spacing(1)}`
-  const transcriptMinPadding = theme.spacing(1)
-
   return (
     <Box
       ref={boxRef}
@@ -72,11 +67,17 @@ export const ChatTranscript = ({
           flexDirection: 'column',
           flexGrow: 1,
           overflow: 'auto',
-          pb: transcriptMinPadding,
-          pt: showRoomControls ? theme.spacing(10) : theme.spacing(2),
-          px: `max(${transcriptPaddingX}, ${transcriptMinPadding})`,
+          mx: { xs: 0.5, sm: 1.5 },
+          mt: { xs: 0.5, sm: 1 },
+          mb: 0,
+          p: { xs: 1.5, sm: 2 },
+          pt: showRoomControls
+            ? { xs: theme.spacing(6), sm: theme.spacing(8) }
+            : { xs: 1.5, sm: 2 },
+          border: `1px solid ${isDark ? '#333333' : '#E5E5E5'}`,
+          borderRadius: '8px',
           transition: `padding-top ${theme.transitions.duration.short}ms ${theme.transitions.easing.easeInOut}`,
-          width: '100%',
+          width: 'auto',
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
@@ -87,8 +88,6 @@ export const ChatTranscript = ({
           previousMessage?.authorId !== message.authorId
 
         return (
-          // This wrapper div is necessary for accurate layout calculations
-          // when new messages cause the transcript to scroll to the bottom.
           <div key={message.id}>
             <Message
               message={message}

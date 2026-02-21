@@ -1,6 +1,7 @@
 import { PropsWithChildren, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import useTheme from '@mui/material/styles/useTheme'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Box from '@mui/material/Box'
 import MuiDrawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
@@ -34,6 +35,7 @@ export interface DrawerProps extends PropsWithChildren {
 
 export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const settingsContext = useContext(SettingsContext)
   const colorMode = settingsContext.getUserSettings().colorMode
 
@@ -53,9 +55,10 @@ export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
           boxSizing: 'border-box',
         },
       }}
-      variant="persistent"
+      variant={isMobile ? 'temporary' : 'persistent'}
       anchor="left"
       open={isDrawerOpen}
+      onClose={onDrawerClose}
     >
       <Box
         sx={() => ({

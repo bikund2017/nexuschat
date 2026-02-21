@@ -41,24 +41,27 @@ export const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(isDrawerOpen && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-  }),
-  ...(isPeerListOpen && {
-    width: `calc(100% - ${peerListWidth}px)`,
-    marginRight: `${peerListWidth}px`,
-  }),
-  ...((isDrawerOpen || isPeerListOpen) && {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
+  // On mobile, drawers are temporary overlays — AppBar stays full width
+  [theme.breakpoints.up('sm')]: {
+    ...(isDrawerOpen && {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: `${drawerWidth}px`,
     }),
-  }),
-  ...(isDrawerOpen &&
-    isPeerListOpen && {
-      width: `calc(100% - ${drawerWidth}px - ${peerListWidth}px)`,
+    ...(isPeerListOpen && {
+      width: `calc(100% - ${peerListWidth}px)`,
+      marginRight: `${peerListWidth}px`,
     }),
+    ...((isDrawerOpen || isPeerListOpen) && {
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+    ...(isDrawerOpen &&
+      isPeerListOpen && {
+        width: `calc(100% - ${drawerWidth}px - ${peerListWidth}px)`,
+      }),
+  },
 }))
 
 interface ShellAppBarProps {
@@ -107,7 +110,8 @@ export const ShellAppBar = ({
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'right',
-              minHeight: '56px',
+              minHeight: { xs: '48px', sm: '56px' },
+              px: { xs: 1, sm: 2 },
             }}
           >
             {isEmbedded ? null : (
@@ -116,7 +120,10 @@ export const ShellAppBar = ({
                 edge="start"
                 color="inherit"
                 aria-label="Open menu"
-                sx={{ mr: 2, ...(isDrawerOpen && { display: 'none' }) }}
+                sx={{
+                  mr: { xs: 0.5, sm: 2 },
+                  ...(isDrawerOpen && { display: 'none' }),
+                }}
                 onClick={onDrawerOpen}
               >
                 <Menu />
@@ -129,11 +136,13 @@ export const ShellAppBar = ({
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 1,
+                    gap: { xs: 0.5, sm: 1 },
                     marginRight: 'auto',
+                    minWidth: 0,
+                    overflow: 'hidden',
                   }}
                 >
-                  <LogoIcon style={{ width: 24, height: 24 }} />
+                  <LogoIcon style={{ width: 24, height: 24, flexShrink: 0 }} />
                   <Typography
                     variant="h6"
                     noWrap
@@ -141,6 +150,9 @@ export const ShellAppBar = ({
                     sx={{
                       fontWeight: 700,
                       letterSpacing: '-0.01em',
+                      fontSize: { xs: '0.95rem', sm: '1.25rem' },
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                     }}
                   >
                     {title}
@@ -152,22 +164,26 @@ export const ShellAppBar = ({
               <>
                 <Tooltip title="Copy current URL">
                   <IconButton
-                    size="large"
+                    size="small"
                     color="inherit"
                     aria-label="Copy current URL"
                     onClick={onLinkButtonClick}
+                    sx={{ p: { xs: 0.75, sm: 1 } }}
                   >
-                    <Link />
+                    <Link sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Show QR Code">
                   <IconButton
-                    size="large"
+                    size="small"
                     color="inherit"
                     aria-label="Show QR Code"
                     onClick={handleQRCodeClick}
+                    sx={{ p: { xs: 0.75, sm: 1 } }}
                   >
-                    <QrCode2 />
+                    <QrCode2
+                      sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}
+                    />
                   </IconButton>
                 </Tooltip>
               </>
@@ -175,7 +191,11 @@ export const ShellAppBar = ({
             {isEmbedded ? null : (
               <Divider
                 orientation="vertical"
-                sx={{ height: theme.spacing(3.5), mx: theme.spacing(1) }}
+                sx={{
+                  height: theme.spacing(3.5),
+                  mx: { xs: 0.25, sm: theme.spacing(1) },
+                  display: { xs: 'none', sm: 'block' },
+                }}
               />
             )}
             <Tooltip
@@ -184,36 +204,49 @@ export const ShellAppBar = ({
               }
             >
               <IconButton
-                size="large"
+                size="small"
                 color="inherit"
                 aria-label="show room controls"
                 onClick={onRoomControlsClick}
+                sx={{ p: { xs: 0.75, sm: 1 } }}
               >
-                <RoomPreferences />
+                <RoomPreferences
+                  sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}
+                />
               </IconButton>
             </Tooltip>
             <Tooltip
               title={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
             >
               <IconButton
-                size="large"
+                size="small"
                 edge="end"
                 color="inherit"
                 aria-label="fullscreen"
                 onClick={onClickFullscreen}
+                sx={{ p: { xs: 0.75, sm: 1 } }}
               >
-                {isFullscreen ? <FullscreenExit /> : <Fullscreen />}
+                {isFullscreen ? (
+                  <FullscreenExit
+                    sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}
+                  />
+                ) : (
+                  <Fullscreen
+                    sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}
+                  />
+                )}
               </IconButton>
             </Tooltip>
             <Tooltip title="Click to show peer list">
               <IconButton
-                size="large"
+                size="small"
                 edge="end"
                 color="inherit"
                 aria-label="Peer list"
                 onClick={onPeerListClick}
                 sx={{
-                  ml: 1,
+                  ml: { xs: 0.25, sm: 1 },
+                  p: { xs: 0.75, sm: 1 },
                   position: 'relative',
                 }}
               >

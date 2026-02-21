@@ -7,12 +7,9 @@ import {
   useState,
 } from 'react'
 import FormControl from '@mui/material/FormControl'
-import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
-import Fab from '@mui/material/Fab'
+import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
-import ArrowUpward from '@mui/icons-material/ArrowUpward'
-import useTheme from '@mui/material/styles/useTheme'
 
 import { messageCharacterSizeLimit } from 'config/messaging'
 import { SettingsContext } from 'contexts/SettingsContext'
@@ -31,8 +28,6 @@ export const MessageForm = ({
 }: MessageFormProps) => {
   const settingsContext = useContext(SettingsContext)
   const { showActiveTypingStatus } = settingsContext.getUserSettings()
-  const theme = useTheme()
-  const isDark = theme.palette.mode === 'dark'
   const textFieldRef = useRef<HTMLInputElement>(null)
   const [textMessage, setTextMessage] = useState('')
 
@@ -84,96 +79,65 @@ export const MessageForm = ({
       onSubmit={handleMessageSubmit}
       sx={{
         ...(showActiveTypingStatus && {
-          pt: 2,
-          px: 2,
+          pt: { xs: 0.75, sm: 1 },
+          px: { xs: 0.75, sm: 1.5 },
         }),
         ...(!showActiveTypingStatus && {
-          p: 2,
+          p: { xs: 0.75, sm: 1.5 },
+          pt: { xs: 0.75, sm: 1 },
         }),
       }}
     >
-      <Stack direction="row" spacing={1.5} alignItems="flex-end">
-        <FormControl fullWidth>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+        }}
+      >
+        {/* Message input */}
+        <FormControl sx={{ flex: 1 }}>
           <TextField
             variant="outlined"
             value={textMessage}
             onChange={handleMessageChange}
             onKeyPress={handleMessageKeyPress}
-            size="medium"
+            size="small"
             placeholder="Type a message..."
             inputRef={textFieldRef}
             multiline
+            maxRows={4}
             sx={{
               '& .MuiOutlinedInput-root': {
-                borderRadius: '16px',
-                backgroundColor: isDark
-                  ? 'rgba(255, 255, 255, 0.04)'
-                  : 'rgba(0, 0, 0, 0.02)',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  backgroundColor: isDark
-                    ? 'rgba(255, 255, 255, 0.06)'
-                    : 'rgba(0, 0, 0, 0.03)',
-                },
-                '&.Mui-focused': {
-                  backgroundColor: isDark
-                    ? 'rgba(255, 255, 255, 0.05)'
-                    : '#FFFFFF',
-                  boxShadow: isDark
-                    ? '0 0 0 2px rgba(255, 255, 255, 0.15)'
-                    : '0 0 0 2px rgba(0, 0, 0, 0.1)',
-                },
+                borderRadius: '6px',
+                fontSize: { xs: '0.9rem', sm: '1rem' },
+                py: 0.5,
               },
             }}
           />
         </FormControl>
-        <Box>
-          <Fab
-            sx={{
-              flexShrink: 0,
-              width: 48,
-              height: 48,
-              backgroundColor: canMessageBeSent()
-                ? isDark
-                  ? '#FFFFFF'
-                  : '#171717'
-                : undefined,
-              color: canMessageBeSent()
-                ? isDark
-                  ? '#000000'
-                  : '#FFFFFF'
-                : undefined,
-              boxShadow: 'none',
-              '&:hover': {
-                backgroundColor: canMessageBeSent()
-                  ? isDark
-                    ? '#E5E5E5'
-                    : '#404040'
-                  : undefined,
-                boxShadow: 'none',
-              },
-              '&:disabled': {
-                backgroundColor: isDark
-                  ? 'rgba(255, 255, 255, 0.06)'
-                  : 'rgba(0, 0, 0, 0.06)',
-              },
-            }}
-            aria-label="Send"
-            type="submit"
-            disabled={!canMessageBeSent()}
-            color="primary"
-          >
-            <ArrowUpward
-              sx={{
-                transition: 'transform 0.2s ease',
-                ...(canMessageBeSent() && {
-                  color: '#FFFFFF',
-                }),
-              }}
-            />
-          </Fab>
-        </Box>
-      </Stack>
+
+        {/* Send button */}
+        <Button
+          variant="contained"
+          type="submit"
+          disabled={!canMessageBeSent()}
+          size="large"
+          sx={{
+            flexShrink: 0,
+            minWidth: 'unset',
+            px: { xs: 3, sm: 4 },
+            borderRadius: '6px',
+            fontWeight: 600,
+            fontSize: { xs: '0.85rem', sm: '0.9rem' },
+            textTransform: 'none',
+            boxShadow: 'none',
+            '&:hover': { boxShadow: 'none' },
+          }}
+        >
+          Send
+        </Button>
+      </Box>
     </Form>
   )
 }

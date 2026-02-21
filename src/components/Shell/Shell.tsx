@@ -424,18 +424,23 @@ export const Shell = ({ appNeedsUpdate, children, userPeerId }: ShellProps) => {
                 sx={{
                   flexShrink: { xs: 1, sm: 0 },
                   pointerEvents: 'none',
-                  width: peerListWidth,
+                  width: { xs: '100%', sm: peerListWidth },
                   '& .MuiDrawer-paper': {
-                    width: peerListWidth,
+                    width: { xs: '80%', sm: peerListWidth },
                     boxSizing: 'border-box',
                   },
                   ...(isPeerListOpen && {
                     pointerEvents: 'auto',
                   }),
                 }}
-                variant="persistent"
+                variant={
+                  windowWidth < theme.breakpoints.values.sm
+                    ? 'temporary'
+                    : 'persistent'
+                }
                 anchor="right"
                 open={isPeerListOpen}
+                onClose={handlePeerListClick}
               >
                 <PeerList
                   userId={userPeerId}
@@ -456,10 +461,7 @@ export const Shell = ({ appNeedsUpdate, children, userPeerId }: ShellProps) => {
                     }}
                   >
                     This conversation is powered by{' '}
-                    <Link
-                      href=""
-                      target="_blank"
-                    >
+                    <Link href="" target="_blank">
                       NexusChat
                     </Link>
                   </Typography>

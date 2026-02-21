@@ -232,6 +232,17 @@ export const useShellTheme = () => {
               },
             },
           },
+          MuiToolbar: {
+            styleOverrides: {
+              regular: {
+                '@media (max-width: 600px)': {
+                  minHeight: 48,
+                  paddingLeft: 8,
+                  paddingRight: 8,
+                },
+              },
+            },
+          },
           MuiIconButton: {
             styleOverrides: {
               root: {

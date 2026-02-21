@@ -47,8 +47,7 @@ const FeatureCard = ({
   return (
     <Box
       sx={{
-        flex: '1 1 200px',
-        p: 3,
+        p: { xs: 2, sm: 3 },
         borderRadius: 2,
         textAlign: 'center',
         background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
@@ -118,15 +117,15 @@ export const Home = ({ userId }: HomeProps) => {
           maxWidth: theme.breakpoints.values.md,
           mt: 0,
           mx: 'auto',
-          px: 2,
+          px: { xs: 1.5, sm: 2 },
           textAlign: 'center',
         }}
       >
         {/* Hero Section */}
         <Box
           sx={{
-            py: { xs: 5, md: 7 },
-            px: 2,
+            py: { xs: 3, md: 7 },
+            px: { xs: 1, md: 2 },
             animation: 'fadeIn 0.5s ease-out',
           }}
         >
@@ -141,7 +140,7 @@ export const Home = ({ userId }: HomeProps) => {
                 : 'rgba(0, 0, 0, 0.03)',
             }}
           >
-            <LogoIcon style={{ width: 56, height: 56 }} />
+            <LogoIcon style={{ width: 48, height: 48 }} />
           </Box>
           <Typography
             variant="h3"
@@ -189,8 +188,8 @@ export const Home = ({ userId }: HomeProps) => {
           sx={{
             maxWidth: 480,
             mx: 'auto',
-            mb: 6,
-            p: { xs: 3, md: 4 },
+            mb: { xs: 3, md: 6 },
+            p: { xs: 2.5, md: 4 },
             borderRadius: 3,
             background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
             border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
@@ -300,9 +299,12 @@ export const Home = ({ userId }: HomeProps) => {
           </Typography>
           <Box
             sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 2,
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: '1fr 1fr',
+                sm: 'repeat(auto-fit, minmax(200px, 1fr))',
+              },
+              gap: { xs: 1.5, sm: 2 },
               justifyContent: 'center',
             }}
           >

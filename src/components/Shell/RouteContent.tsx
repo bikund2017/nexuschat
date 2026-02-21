@@ -20,22 +20,29 @@ const StyledMain = styled('main', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${drawerWidth}px`,
-  marginRight: `-${peerListWidth}px`,
-  ...(isDrawerOpen && {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+  // On mobile (< sm), drawers are temporary overlays, so no negative margins needed
+  [theme.breakpoints.down('sm')]: {
     marginLeft: 0,
-  }),
-  ...(isPeerListOpen && {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
     marginRight: 0,
-  }),
+  },
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: `-${drawerWidth}px`,
+    marginRight: `-${peerListWidth}px`,
+    ...(isDrawerOpen && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+    ...(isPeerListOpen && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginRight: 0,
+    }),
+  },
 }))
 
 interface RouteContentProps extends PropsWithChildren {
@@ -59,6 +66,9 @@ export const RouteContent = ({
         <Box
           sx={theme => ({
             ...theme.mixins.toolbar,
+            [theme.breakpoints.down('sm')]: {
+              minHeight: 48,
+            },
           })}
         />
       </Collapse>

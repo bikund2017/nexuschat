@@ -15,7 +15,6 @@ import {
   InlineMedia as I_InlineMedia,
   Message as IMessage,
   DeliveryStatus,
-  isMessageReceived,
   isInlineMedia,
 } from 'models/chat'
 import { PeerNameDisplay } from 'components/PeerNameDisplay'
@@ -105,41 +104,39 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
   const isDark = theme.palette.mode === 'dark'
   const isSent = message.authorId === userId
 
-  let backgroundColor: string
   let bubbleStyles: Record<string, any> = {}
 
   if (isSent) {
-    if (isDark) {
-      backgroundColor = isMessageReceived(message) ? '#E5E5E5' : '#D4D4D4'
-      bubbleStyles = { color: '#0A0A0A' }
-    } else {
-      backgroundColor = isMessageReceived(message) ? '#171717' : '#404040'
-      bubbleStyles = { color: '#FFFFFF' }
-    }
+    bubbleStyles = isDark
+      ? { backgroundColor: '#2A2A2A', color: '#E5E5E5' }
+      : { backgroundColor: '#171717', color: '#FFFFFF' }
   } else {
-    if (isDark) {
-      backgroundColor = 'transparent'
-      bubbleStyles = {
-        background: 'rgba(255, 255, 255, 0.04)',
-        border: '1px solid #262626',
-      }
-    } else {
-      backgroundColor = 'transparent'
-      bubbleStyles = {
-        background: '#F5F5F5',
-        border: '1px solid #E5E5E5',
-      }
-    }
+    bubbleStyles = isDark
+      ? {
+          backgroundColor: '#1A1A1A',
+          color: '#E5E5E5',
+        }
+      : {
+          backgroundColor: '#F5F5F5',
+          color: '#171717',
+        }
   }
 
   return (
-    <Box className="Message nexus-fade-in" sx={{ position: 'relative' }}>
+    <Box
+      className="Message nexus-fade-in"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: isSent ? 'flex-end' : 'flex-start',
+        mt: showAuthor ? 1.5 : 0.5,
+      }}
+    >
       {showAuthor && (
         <Typography
           variant="caption"
           display="block"
           sx={{
-            textAlign: isSent ? 'right' : 'left',
             color: 'text.secondary',
             fontWeight: 500,
             fontSize: '0.75rem',
@@ -162,25 +159,16 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
       >
         <Box
           sx={{
-            color: isSent
-              ? isDark
-                ? '#0A0A0A'
-                : '#FFFFFF'
-              : isDark
-                ? '#E5E5E5'
-                : '#171717',
-            backgroundColor,
             ...bubbleStyles,
-            margin: 0.5,
-            padding: '10px 16px',
-            borderRadius: isSent ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-            float: isSent ? 'right' : 'left',
+            display: 'inline-block',
+            px: 1.5,
+            py: 0.75,
+            borderRadius: '8px',
             wordBreak: 'break-word',
-            boxShadow: isDark
-              ? '0 1px 2px rgba(0, 0, 0, 0.15)'
-              : '0 1px 2px rgba(0, 0, 0, 0.05)',
+            maxWidth: { xs: '85%', sm: '75%' },
+            fontSize: '0.875rem',
+            lineHeight: 1.5,
           }}
-          maxWidth="85%"
         >
           {isInlineMedia(message) ? (
             <InlineMedia magnetURI={message.magnetURI} />
@@ -211,13 +199,13 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
             <Box
               component="span"
               sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                mt: 0.25,
-                fontSize: '0.7rem',
+                display: 'inline-block',
+                ml: 0.5,
+                fontSize: '0.65rem',
                 lineHeight: 1,
-                opacity: 0.7,
+                opacity: 0.6,
                 userSelect: 'none',
+                verticalAlign: 'bottom',
               }}
               aria-label={
                 message.deliveryStatus === DeliveryStatus.DELIVERED
@@ -228,19 +216,13 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
               }
             >
               {message.deliveryStatus === DeliveryStatus.DELIVERED ? (
-                <Tooltip title="Delivered" placement="bottom">
-                  <span style={{ letterSpacing: '-3px', fontWeight: 700 }}>
-                    ✓✓
-                  </span>
-                </Tooltip>
+                <span style={{ letterSpacing: '-3px', fontWeight: 700 }}>
+                  ✓✓
+                </span>
               ) : message.deliveryStatus === DeliveryStatus.SENT ? (
-                <Tooltip title="Sent" placement="bottom">
-                  <span style={{ fontWeight: 700 }}>✓</span>
-                </Tooltip>
+                <span style={{ fontWeight: 700 }}>✓</span>
               ) : (
-                <Tooltip title="Sending..." placement="bottom">
-                  <span style={{ fontWeight: 400 }}>○</span>
-                </Tooltip>
+                <span style={{ fontWeight: 400 }}>○</span>
               )}
             </Box>
           )}

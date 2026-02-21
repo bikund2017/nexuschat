@@ -1,4 +1,6 @@
 import Fab, { FabProps } from '@mui/material/Fab'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 import { forwardRef } from 'react'
 
 interface MediaButtonProps extends Partial<FabProps> {
@@ -7,39 +9,43 @@ interface MediaButtonProps extends Partial<FabProps> {
 
 export const MediaButton = forwardRef<HTMLButtonElement, MediaButtonProps>(
   ({ isActive, ...props }: MediaButtonProps, ref) => {
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
     return (
       <Fab
         {...props}
         ref={ref}
-        sx={theme =>
-          theme.palette.mode === 'dark'
+        size={isMobile ? 'small' : 'medium'}
+        sx={muiTheme =>
+          muiTheme.palette.mode === 'dark'
             ? isActive
               ? {
-                  color: theme.palette.common.white,
-                  background: theme.palette.success.main,
+                  color: muiTheme.palette.common.white,
+                  background: muiTheme.palette.success.main,
                   '&:hover': {
-                    background: theme.palette.success.dark,
+                    background: muiTheme.palette.success.dark,
                   },
                 }
               : {
-                  background: theme.palette.grey[500],
+                  background: muiTheme.palette.grey[500],
                   '&:hover': {
-                    background: theme.palette.grey[600],
+                    background: muiTheme.palette.grey[600],
                   },
                 }
             : isActive
               ? {
-                  color: theme.palette.common.white,
-                  background: theme.palette.success.main,
+                  color: muiTheme.palette.common.white,
+                  background: muiTheme.palette.success.main,
                   '&:hover': {
-                    background: theme.palette.success.dark,
+                    background: muiTheme.palette.success.dark,
                   },
                 }
               : {
-                  color: theme.palette.common.black,
-                  background: theme.palette.grey[400],
+                  color: muiTheme.palette.common.black,
+                  background: muiTheme.palette.grey[400],
                   '&:hover': {
-                    background: theme.palette.grey[500],
+                    background: muiTheme.palette.grey[500],
                   },
                 }
         }
