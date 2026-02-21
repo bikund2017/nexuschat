@@ -1,6 +1,0 @@
-{
-  "telemetry": {
-    "enabled": false,
-    "target": "gcp"
-  }
-}

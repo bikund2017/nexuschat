@@ -4,7 +4,7 @@ export const manifest: Partial<ManifestOptions> = {
   short_name: 'NexusChat',
   name: 'NexusChat',
   description:
-    'NexusChat — A secure, peer-to-peer encrypted communication platform with real-time collaboration. No servers, no tracking, no traces.',
+    'A secure, peer-to-peer encrypted communication platform. No servers, no tracking, no traces.',
   icons: [
     {
       src: 'favicon.ico',
@@ -21,69 +21,58 @@ export const manifest: Partial<ManifestOptions> = {
       type: 'image/png',
       sizes: '512x512',
     },
+    {
+      src: 'logo512.png',
+      type: 'image/png',
+      sizes: '512x512',
+      purpose: 'maskable',
+    },
   ],
   start_url: './',
-  display: 'fullscreen',
+  scope: './',
+  display: 'standalone',
+  orientation: 'any',
   theme_color: '#171717',
   background_color: '#0A0A0A',
-  screenshots: [
-    {
-      src: 'screenshots/home-desktop.png',
-      sizes: '2160x1620',
-      type: 'image/png',
-    },
-    {
-      src: 'screenshots/public-room-desktop.png',
-      sizes: '2160x1620',
-      type: 'image/png',
-    },
-    {
-      src: 'screenshots/public-room-desktop-with-video.png',
-      sizes: '2160x1620',
-      type: 'image/png',
-    },
-    {
-      src: 'screenshots/home-mobile-dark.png',
-      sizes: '750x1334',
-      type: 'image/png',
-      form_factor: 'narrow',
-    },
-    {
-      src: 'screenshots/home-mobile-light.png',
-      sizes: '750x1334',
-      type: 'image/png',
-      form_factor: 'narrow',
-    },
-    {
-      src: 'screenshots/public-room-mobile.png',
-      sizes: '750x1334',
-      type: 'image/png',
-      form_factor: 'narrow',
-    },
-  ],
+  categories: ['social', 'communication', 'productivity'],
 
   shortcuts: [
     {
-      name: 'About',
-      url: './about',
+      name: 'New Room',
+      short_name: 'New Room',
+      url: './',
+      description: 'Create or join a chat room',
       icons: [
         {
-          src: 'logo512.png',
-          sizes: '512x512',
+          src: 'logo192.png',
+          sizes: '192x192',
           type: 'image/png',
-          purpose: 'any',
         },
       ],
     },
     {
-      name: 'Disclaimer',
-      url: './disclaimer',
+      name: 'Settings',
+      short_name: 'Settings',
+      url: './settings',
+      description: 'App preferences',
       icons: [
         {
-          src: 'logo512.png',
-          sizes: '512x512',
+          src: 'logo192.png',
+          sizes: '192x192',
           type: 'image/png',
-          purpose: 'any',
+        },
+      ],
+    },
+    {
+      name: 'About',
+      short_name: 'About',
+      url: './about',
+      description: 'About NexusChat',
+      icons: [
+        {
+          src: 'logo192.png',
+          sizes: '192x192',
+          type: 'image/png',
         },
       ],
     },

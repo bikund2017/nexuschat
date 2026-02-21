@@ -1,10 +1,21 @@
 {
   "name": "nexuschat",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A secure peer-to-peer encrypted chat application built with React, TypeScript, and WebRTC for real-time communication.",
   "homepage": "/",
-  "author": "NexusChat",
-  "license": "GPL-2.0-or-later",
+  "author": "bikund2017",
+  "license": "MIT",
   "type": "module",
+  "keywords": [
+    "chat",
+    "p2p",
+    "webrtc",
+    "encryption",
+    "react",
+    "typescript",
+    "real-time",
+    "peer-to-peer"
+  ],
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -48,7 +59,6 @@
     "usehooks-ts": "^3.1.1",
     "uuid": "^8.3.2",
     "vite-plugin-babel-macros": "^1.0.6",
-    "web-vitals": "^2.1.4",
     "webrtc-adapter": "^8.2.4"
   },
   "scripts": {

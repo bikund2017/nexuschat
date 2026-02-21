@@ -34,10 +34,9 @@ const srcPathAliases = srcPaths.reduce((acc, dir) => {
 
 const config = () => {
   return defineConfig({
-    // NOTE: Uncomment this if you are hosting Chitchatter on GitHub Pages
-    // without a custom domain. If you renamed the repo to something other than
-    // "chitchatter", then use that instead of "chitchatter" here.
-    // base: '/chitchatter/',
+    // NOTE: Uncomment this if you are hosting NexusChat on GitHub Pages
+    // without a custom domain. Replace 'nexuschat' with your repo name if different.
+    // base: '/nexuschat/',
     server: {
       proxy: {
         '/api': {
@@ -77,7 +76,41 @@ const config = () => {
         injectRegister: 'auto',
         filename: 'service-worker.js',
         manifest,
-        selfDestroying: true,
+        workbox: {
+          // Cache app shell and static assets
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+          // Runtime caching for Google Fonts
+          runtimeCaching: [
+            {
+              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-fonts-cache',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+                },
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
+            {
+              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'gstatic-fonts-cache',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+                },
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
+          ],
+        },
       }),
     ],
     resolve: {
