@@ -20,6 +20,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import ReportIcon from '@mui/icons-material/Report'
 
+import LogoIcon from 'img/icon.svg?react'
 import { routes } from 'config/routes'
 import { SettingsContext } from 'contexts/SettingsContext'
 import { ColorMode } from 'models/settings'
@@ -65,13 +66,16 @@ export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
           justifyContent: 'space-between',
         })}
       >
-        <Typography
-          variant="h6"
-          className="nexus-gradient-text"
-          sx={{ fontWeight: 700, ml: 1.5, fontSize: '1.1rem' }}
-        >
-          NexusChat
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1.5 }}>
+          <LogoIcon style={{ width: 28, height: 28 }} />
+          <Typography
+            variant="h6"
+            className="nexus-gradient-text"
+            sx={{ fontWeight: 700, fontSize: '1.1rem' }}
+          >
+            NexusChat
+          </Typography>
+        </Box>
         <IconButton onClick={onDrawerClose} aria-label="Close menu">
           {theme.direction === 'ltr' ? (
             <ChevronLeftIcon />

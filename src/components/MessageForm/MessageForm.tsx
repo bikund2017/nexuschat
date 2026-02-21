@@ -117,9 +117,11 @@ export const MessageForm = ({
                 },
                 '&.Mui-focused': {
                   backgroundColor: isDark
-                    ? 'rgba(255, 255, 255, 0.06)'
-                    : 'rgba(0, 0, 0, 0.01)',
-                  boxShadow: '0 0 0 2px rgba(100, 116, 139, 0.2)',
+                    ? 'rgba(255, 255, 255, 0.05)'
+                    : '#FFFFFF',
+                  boxShadow: isDark
+                    ? '0 0 0 2px rgba(255, 255, 255, 0.15)'
+                    : '0 0 0 2px rgba(0, 0, 0, 0.1)',
                 },
               },
             }}
@@ -131,20 +133,29 @@ export const MessageForm = ({
               flexShrink: 0,
               width: 48,
               height: 48,
-              background: canMessageBeSent()
-                ? 'linear-gradient(135deg, #64748B 0%, #94A3B8 100%)'
+              backgroundColor: canMessageBeSent()
+                ? isDark
+                  ? '#FFFFFF'
+                  : '#171717'
                 : undefined,
-              transition: 'all 0.3s ease',
+              color: canMessageBeSent()
+                ? isDark
+                  ? '#000000'
+                  : '#FFFFFF'
+                : undefined,
+              boxShadow: 'none',
               '&:hover': {
-                transform: canMessageBeSent() ? 'scale(1.05)' : 'none',
-                background: canMessageBeSent()
-                  ? 'linear-gradient(135deg, #334155 0%, #64748B 100%)'
+                backgroundColor: canMessageBeSent()
+                  ? isDark
+                    ? '#E5E5E5'
+                    : '#404040'
                   : undefined,
+                boxShadow: 'none',
               },
               '&:disabled': {
                 backgroundColor: isDark
-                  ? 'rgba(255, 255, 255, 0.08)'
-                  : 'rgba(0, 0, 0, 0.08)',
+                  ? 'rgba(255, 255, 255, 0.06)'
+                  : 'rgba(0, 0, 0, 0.06)',
               },
             }}
             aria-label="Send"

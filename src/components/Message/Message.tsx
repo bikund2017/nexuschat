@@ -99,51 +99,40 @@ const isYouTubeLink = (message: IMessage) => {
   return typeof getYouTubeVideoId(message.text) === 'string'
 }
 
-
-
 export const Message = ({ message, showAuthor, userId }: MessageProps) => {
   const theme = useTheme()
   const isDark = theme.palette.mode === 'dark'
   const isSent = message.authorId === userId
-
 
   let backgroundColor: string
   let bubbleStyles: Record<string, any> = {}
 
   if (isSent) {
     if (isDark) {
-      backgroundColor = isMessageReceived(message)
-        ? 'transparent'
-        : 'transparent'
-      bubbleStyles = {
-        background: isMessageReceived(message)
-          ? 'linear-gradient(135deg, #64748B 0%, #475569 100%)'
-          : 'linear-gradient(135deg, #94A3B8 0%, #64748B 100%)',
-      }
+      backgroundColor = isMessageReceived(message) ? '#E5E5E5' : '#D4D4D4'
+      bubbleStyles = { color: '#0A0A0A' }
     } else {
-      backgroundColor = isMessageReceived(message)
-        ? 'primary.main'
-        : 'primary.light'
+      backgroundColor = isMessageReceived(message) ? '#171717' : '#404040'
+      bubbleStyles = { color: '#FFFFFF' }
     }
   } else {
     if (isDark) {
       backgroundColor = 'transparent'
       bubbleStyles = {
-        background: 'rgba(255, 255, 255, 0.06)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        background: 'rgba(255, 255, 255, 0.04)',
+        border: '1px solid #262626',
       }
     } else {
-      backgroundColor = 'grey.100'
+      backgroundColor = 'transparent'
+      bubbleStyles = {
+        background: '#F5F5F5',
+        border: '1px solid #E5E5E5',
+      }
     }
   }
 
-
-
   return (
-    <Box
-      className="Message nexus-fade-in"
-      sx={{ position: 'relative' }}
-    >
+    <Box className="Message nexus-fade-in" sx={{ position: 'relative' }}>
       {showAuthor && (
         <Typography
           variant="caption"
@@ -173,32 +162,22 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
         <Box
           sx={{
             color: isSent
-              ? 'primary.contrastText'
+              ? isDark
+                ? '#0A0A0A'
+                : '#FFFFFF'
               : isDark
-                ? '#E2E8F0'
-                : 'text.primary',
+                ? '#E5E5E5'
+                : '#171717',
             backgroundColor,
             ...bubbleStyles,
             margin: 0.5,
             padding: '10px 16px',
-            borderRadius: isSent
-              ? '18px 18px 4px 18px'
-              : '18px 18px 18px 4px',
+            borderRadius: isSent ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
             float: isSent ? 'right' : 'left',
-            transition: 'all 0.3s ease',
             wordBreak: 'break-word',
             boxShadow: isDark
-              ? isSent
-                ? '0 2px 12px rgba(100, 116, 139, 0.2)'
-                : '0 2px 8px rgba(0, 0, 0, 0.15)'
-              : '0 1px 4px rgba(0, 0, 0, 0.08)',
-            '&:hover': {
-              boxShadow: isDark
-                ? isSent
-                  ? '0 4px 20px rgba(100, 116, 139, 0.3)'
-                  : '0 4px 16px rgba(0, 0, 0, 0.25)'
-                : '0 2px 8px rgba(0, 0, 0, 0.12)',
-            },
+              ? '0 1px 2px rgba(0, 0, 0, 0.15)'
+              : '0 1px 2px rgba(0, 0, 0, 0.05)',
           }}
           maxWidth="85%"
         >
@@ -229,7 +208,6 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
           )}
         </Box>
       </Tooltip>
-
     </Box>
   )
 }

@@ -22,6 +22,7 @@ import RoomPreferences from '@mui/icons-material/RoomPreferences'
 
 import { useContext } from 'react'
 
+import LogoIcon from 'img/icon.svg?react'
 import { ShellContext } from 'contexts/ShellContext'
 
 import { drawerWidth } from './Drawer'
@@ -56,8 +57,8 @@ export const AppBar = styled(MuiAppBar, {
   }),
   ...(isDrawerOpen &&
     isPeerListOpen && {
-    width: `calc(100% - ${drawerWidth}px - ${peerListWidth}px)`,
-  }),
+      width: `calc(100% - ${drawerWidth}px - ${peerListWidth}px)`,
+    }),
 }))
 
 interface ShellAppBarProps {
@@ -124,19 +125,28 @@ export const ShellAppBar = ({
 
             {isEmbedded ? null : (
               <Tooltip title={title}>
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="div"
-                  className="nexus-gradient-text"
+                <Box
                   sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
                     marginRight: 'auto',
-                    fontWeight: 700,
-                    letterSpacing: '-0.01em',
                   }}
                 >
-                  {title}
-                </Typography>
+                  <LogoIcon style={{ width: 24, height: 24 }} />
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    className="nexus-gradient-text"
+                    sx={{
+                      fontWeight: 700,
+                      letterSpacing: '-0.01em',
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                </Box>
               </Tooltip>
             )}
             {isEmbedded ? null : (
