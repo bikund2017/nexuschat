@@ -35,9 +35,6 @@ const srcPathAliases = srcPaths.reduce((acc, dir) => {
 
 const config = () => {
   return defineConfig({
-    // NOTE: Uncomment this if you are hosting NexusChat on GitHub Pages
-    // without a custom domain. Replace 'nexuschat' with your repo name if different.
-    // base: '/nexuschat/',
     server: {
       https: true,
       host: true,
