@@ -56,26 +56,47 @@ const queryClient = new QueryClient({
 const getConfigFromSdk = () => {
   const queryParams = new URLSearchParams(window.location.search)
 
-  const { origin: parentFrameOrigin } = new URL(
-    decodeURIComponent(queryParams.get(QueryParamKeys.PARENT_DOMAIN) ?? '')
-  )
+  const parentDomainParam = queryParams.get(QueryParamKeys.PARENT_DOMAIN)
+
+  if (!parentDomainParam) {
+    return Promise.reject(
+      new Error('SDK config requested but no parent domain specified')
+    )
+  }
+
+  let parentFrameOrigin: string
+  try {
+    parentFrameOrigin = new URL(decodeURIComponent(parentDomainParam)).origin
+  } catch (_e) {
+    return Promise.reject(
+      new Error(`Invalid parent domain URL: ${parentDomainParam}`)
+    )
+  }
 
   return new Promise<Partial<UserSettings>>((resolve, reject) => {
-    let expireTimout: NodeJS.Timeout
+    let expireTimeout: NodeJS.Timeout
 
-    const expireListener = () => {
+    const cleanup = () => {
       window.removeEventListener('message', handleMessage)
-      clearTimeout(expireTimout)
-      reject()
+      clearTimeout(expireTimeout)
     }
 
-    expireTimout = setTimeout(expireListener, configListenerTimeout)
+    const expireListener = () => {
+      cleanup()
+      reject(
+        new Error(
+          `SDK configuration from parent frame timed out after ${configListenerTimeout}ms`
+        )
+      )
+    }
+
+    expireTimeout = setTimeout(expireListener, configListenerTimeout)
 
     const handleMessage = (event: MessageEvent) => {
       if (!isConfigMessageEvent(event)) return
 
+      cleanup()
       resolve(event.data.payload)
-      expireListener()
     }
 
     window.addEventListener('message', handleMessage)
