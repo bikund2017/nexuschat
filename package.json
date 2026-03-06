@@ -19,6 +19,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.2.10",
     "@mui/icons-material": "^5.18.0",
     "@mui/material": "^5.18.0",
     "@react-hook/debounce": "^4.0.0",
@@ -36,7 +37,6 @@
     "localforage": "^1.10.0",
     "modern-normalize": "^2.0.0",
     "mui-markdown": "^0.5.5",
-    "querystring": "^0.2.1",
     "random-word-slugs": "^0.1.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -54,8 +54,6 @@
     "secure-file-transfer": "^0.0.8",
     "streamsaver": "^2.0.6",
     "trystero": "^0.22.0",
-    "typeface-public-sans": "^1.1.13",
-    "typeface-roboto": "^1.1.13",
     "typescript": "^5.9.3",
     "usehooks-ts": "^3.1.1",
     "uuid": "^8.3.2",
@@ -81,8 +79,8 @@
     ]
   },
   "engines": {
-    "node": "20.19.5",
-    "npm": "10.8.2"
+    "node": ">=20",
+    "npm": ">=10"
   },
   "browserslist": {
     "production": [
@@ -98,7 +96,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-transform-private-property-in-object": "^7.28.6",
     "@playwright/test": "^1.56.1",
     "@testing-library/jest-dom": "^6.7.0",
     "@types/file-saver": "^2.0.7",
@@ -112,7 +110,7 @@
     "@types/webtorrent": "^0.109.3",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.35.1",
-    "@vercel/node": "^5.3.0",
+    "@vercel/node": "^5.6.11",
     "@vitejs/plugin-basic-ssl": "^2.1.4",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.8",
@@ -147,15 +145,19 @@
       "react": "$react",
       "react-dom": "$react-dom"
     },
-    "resolve-url-loader": {
-      "postcss": "8.4.31"
-    },
     "secure-file-transfer": {
       "readable-web-to-node-stream": "3.0.2"
     },
     "eslint-config-react-app": {
       "@typescript-eslint/eslint-plugin": "^8.35.1",
-      "@typescript-eslint/parser": "^8.35.1"
-    }
+      "@typescript-eslint/parser": "^8.35.1",
+      "@babel/plugin-proposal-class-properties": "npm:@babel/plugin-transform-class-properties@latest",
+      "@babel/plugin-proposal-nullish-coalescing-operator": "npm:@babel/plugin-transform-nullish-coalescing-operator@latest",
+      "@babel/plugin-proposal-numeric-separator": "npm:@babel/plugin-transform-numeric-separator@latest",
+      "@babel/plugin-proposal-optional-chaining": "npm:@babel/plugin-transform-optional-chaining@latest",
+      "@babel/plugin-proposal-private-methods": "npm:@babel/plugin-transform-private-methods@latest",
+      "@babel/plugin-proposal-private-property-in-object": "npm:@babel/plugin-transform-private-property-in-object@latest"
+    },
+    "serialize-javascript": "^7.0.4"
   }
 }

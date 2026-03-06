@@ -53,6 +53,53 @@ const config = () => {
       // for exposing source code to users.
       // See: https://github.com/vitejs/vite/issues/15012#issuecomment-1956429165
       sourcemap: true,
+      chunkSizeWarningLimit: 1500,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              // Markdown rendering
+              if (
+                id.includes('react-markdown') ||
+                id.includes('remark-') ||
+                id.includes('rehype-') ||
+                id.includes('mdast-') ||
+                id.includes('micromark') ||
+                id.includes('mui-markdown') ||
+                id.includes('unified')
+              ) {
+                return 'vendor-markdown'
+              }
+              // P2P / WebRTC (trystero + webtorrent stack)
+              if (
+                id.includes('trystero') ||
+                id.includes('webtorrent') ||
+                id.includes('bittorrent') ||
+                id.includes('simple-peer')
+              ) {
+                return 'vendor-p2p'
+              }
+              // React + MUI + Emotion + Syntax highlighting (combined to avoid circular deps)
+              if (
+                id.includes('/react/') ||
+                id.includes('/react-dom/') ||
+                id.includes('react-router') ||
+                id.includes('scheduler') ||
+                id.includes('@mui/') ||
+                id.includes('@emotion/') ||
+                id.includes('react-transition-group') ||
+                id.includes('clsx') ||
+                id.includes('prop-types') ||
+                id.includes('react-syntax-highlighter') ||
+                id.includes('refractor') ||
+                id.includes('prismjs')
+              ) {
+                return 'vendor-ui'
+              }
+            }
+          },
+        },
+      },
     },
     plugins: [
       basicSsl(),
