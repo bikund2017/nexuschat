@@ -1,7 +1,14 @@
 export class Audio {
-  private audioContext: AudioContext = new AudioContext()
+  private audioContext: AudioContext | null = null
 
   private audioBuffer: AudioBuffer | null = null
+
+  private getAudioContext(): AudioContext {
+    if (!this.audioContext || this.audioContext.state === 'closed') {
+      this.audioContext = new AudioContext()
+    }
+    return this.audioContext
+  }
 
   constructor(audioDataUrl?: string) {
     if (audioDataUrl) {
@@ -12,10 +19,18 @@ export class Audio {
   load = async (audioDataUrl: string) => {
     try {
       const response = await fetch(audioDataUrl)
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch audio: ${response.status} ${response.statusText}`
+        )
+      }
+
       const arrayBuffer = await response.arrayBuffer()
-      this.audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer)
+      const context = this.getAudioContext()
+      this.audioBuffer = await context.decodeAudioData(arrayBuffer)
     } catch (e) {
-      console.error(e)
+      console.error('Audio load failed:', e)
     }
   }
 
@@ -25,9 +40,32 @@ export class Audio {
       return
     }
 
-    const audioSource = this.audioContext.createBufferSource()
-    audioSource.buffer = this.audioBuffer
-    audioSource.connect(this.audioContext.destination)
-    audioSource.start()
+    try {
+      const context = this.getAudioContext()
+
+      // Resume AudioContext if it was suspended (e.g., due to autoplay policy)
+      if (context.state === 'suspended') {
+        context.resume().catch(e => {
+          console.error('Failed to resume AudioContext:', e)
+        })
+      }
+
+      const audioSource = context.createBufferSource()
+      audioSource.buffer = this.audioBuffer
+      audioSource.connect(context.destination)
+      audioSource.start()
+    } catch (e) {
+      console.error('Audio playback failed:', e)
+    }
+  }
+
+  dispose = () => {
+    if (this.audioContext && this.audioContext.state !== 'closed') {
+      this.audioContext.close().catch(e => {
+        console.error('Failed to close AudioContext:', e)
+      })
+    }
+    this.audioContext = null
+    this.audioBuffer = null
   }
 }

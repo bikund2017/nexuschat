@@ -115,7 +115,11 @@ export class PeerRoom {
   }
 
   leaveRoom = () => {
-    this.room.leave()
+    try {
+      this.room.leave()
+    } catch (e) {
+      console.error('Error leaving room:', e)
+    }
     this.flush()
   }
 
@@ -165,27 +169,33 @@ export class PeerRoom {
 
     await Promise.all(
       Object.entries(peers).map(async ([peerId, rtcPeerConnection]) => {
-        const stats = await rtcPeerConnection.getStats()
-        let selectedLocalCandidate
+        try {
+          const stats = await rtcPeerConnection.getStats()
+          let selectedLocalCandidate
 
-        // https://stackoverflow.com/a/61571171/470685
-        for (const { type, state, localCandidateId } of stats.values())
-          if (
-            type === 'candidate-pair' &&
-            state === 'succeeded' &&
-            localCandidateId
-          ) {
-            selectedLocalCandidate = localCandidateId
-            break
-          }
+          // https://stackoverflow.com/a/61571171/470685
+          for (const { type, state, localCandidateId } of stats.values())
+            if (
+              type === 'candidate-pair' &&
+              state === 'succeeded' &&
+              localCandidateId
+            ) {
+              selectedLocalCandidate = localCandidateId
+              break
+            }
 
-        const isRelay =
-          !!selectedLocalCandidate &&
-          stats.get(selectedLocalCandidate)?.candidateType === 'relay'
+          const isRelay =
+            !!selectedLocalCandidate &&
+            stats.get(selectedLocalCandidate)?.candidateType === 'relay'
 
-        peerConnections[peerId] = isRelay
-          ? PeerConnectionType.RELAY
-          : PeerConnectionType.DIRECT
+          peerConnections[peerId] = isRelay
+            ? PeerConnectionType.RELAY
+            : PeerConnectionType.DIRECT
+        } catch (e) {
+          console.error(`Failed to get connection type for peer ${peerId}:`, e)
+          // Default to DIRECT if we can't determine the connection type
+          peerConnections[peerId] = PeerConnectionType.DIRECT
+        }
       })
     )
 
@@ -258,7 +268,12 @@ export class PeerRoom {
     // conditions on the receiver's end where streams and their metadata get
     // mixed up.
     this.streamQueue.push(
-      () => Promise.all(this.room.addStream(stream, targetPeers, metadata)),
+      () =>
+        Promise.all(this.room.addStream(stream, targetPeers, metadata)).catch(
+          e => {
+            console.error('Failed to add stream to peer room:', e)
+          }
+        ),
       () => sleep(streamQueueAddDelay)
     )
 
@@ -266,6 +281,10 @@ export class PeerRoom {
   }
 
   removeStream: Room['removeStream'] = (stream, targetPeers) => {
-    return this.room.removeStream(stream, targetPeers)
+    try {
+      return this.room.removeStream(stream, targetPeers)
+    } catch (e) {
+      console.error('Failed to remove stream from peer room:', e)
+    }
   }
 }
