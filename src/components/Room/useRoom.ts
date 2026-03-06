@@ -116,7 +116,7 @@ export function useRoom(
   const { getDisplayUsername } = usePeerNameDisplay()
 
   const fileTransferService = useMemo(
-    () => new FileTransferService(roomConfig.rtcConfig!),
+    () => new FileTransferService(roomConfig.rtcConfig ?? {}),
     [roomConfig.rtcConfig]
   )
 
@@ -464,17 +464,31 @@ export function useRoom(
     setIsMessageSending(true)
     setMessageLog([...messageLog, unsentMessage])
 
-    await sendPeerMessage(unsentMessage, targetPeerId)
+    try {
+      await sendPeerMessage(unsentMessage, targetPeerId)
 
-    setMessageLog([
-      ...messageLog,
-      {
-        ...unsentMessage,
-        timeReceived: timeService.now(),
-        deliveryStatus: DeliveryStatus.SENT,
-      },
-    ])
-    setIsMessageSending(false)
+      setMessageLog([
+        ...messageLog,
+        {
+          ...unsentMessage,
+          timeReceived: timeService.now(),
+          deliveryStatus: DeliveryStatus.SENT,
+        },
+      ])
+    } catch (e) {
+      console.error('Failed to send message:', e)
+      // Keep the message in the log but mark it as failed to send
+      setMessageLog([
+        ...messageLog,
+        {
+          ...unsentMessage,
+          timeReceived: timeService.now(),
+          deliveryStatus: DeliveryStatus.SENDING,
+        },
+      ])
+    } finally {
+      setIsMessageSending(false)
+    }
   }
 
   if (!isDirectMessageRoom) {
@@ -511,28 +525,27 @@ export function useRoom(
     })
 
     peerRoom.onPeerLeave(PeerHookType.NEW_PEER, (peerId: string) => {
-      const peerIndex = peerList.findIndex(peer => peer.peerId === peerId)
-      const doesPeerExist = peerIndex !== -1
+      setPeerList(prev => {
+        const peerIndex = prev.findIndex(peer => peer.peerId === peerId)
+        const doesPeerExist = peerIndex !== -1
 
-      showAlert(
-        `${
-          doesPeerExist
-            ? getDisplayUsername(peerList[peerIndex].userId)
-            : 'Someone'
-        } has left the room`,
-        {
-          severity: 'warning',
-        }
-      )
+        showAlert(
+          `${
+            doesPeerExist
+              ? getDisplayUsername(prev[peerIndex].userId)
+              : 'Someone'
+          } has left the room`,
+          {
+            severity: 'warning',
+          }
+        )
 
-      if (doesPeerExist) {
-        setPeerList(prev => {
-          const peerListClone = [...prev]
-          peerListClone.splice(peerIndex, 1)
+        if (!doesPeerExist) return prev
 
-          return peerListClone
-        })
-      }
+        const peerListClone = [...prev]
+        peerListClone.splice(peerIndex, 1)
+        return peerListClone
+      })
     })
   }
 
@@ -545,28 +558,36 @@ export function useRoom(
   if (!showVideoDisplay && !isShowingMessages) setIsShowingMessages(true)
 
   const handleInlineMediaUpload = async (files: File[]) => {
-    const fileOfferId = await fileTransferService.fileTransfer.offer(
-      files,
-      roomId
-    )
+    try {
+      const fileOfferId = await fileTransferService.fileTransfer.offer(
+        files,
+        roomId
+      )
 
-    const unsentInlineMedia: UnsentInlineMedia = {
-      authorId: userId,
-      magnetURI: fileOfferId,
-      timeSent: timeService.now(),
-      id: getUuid(),
+      const unsentInlineMedia: UnsentInlineMedia = {
+        authorId: userId,
+        magnetURI: fileOfferId,
+        timeSent: timeService.now(),
+        id: getUuid(),
+      }
+
+      setIsMessageSending(true)
+      setMessageLog([...messageLog, unsentInlineMedia])
+
+      await sendPeerInlineMedia(unsentInlineMedia)
+
+      setMessageLog([
+        ...messageLog,
+        { ...unsentInlineMedia, timeReceived: timeService.now() },
+      ])
+    } catch (e) {
+      console.error('Failed to upload inline media:', e)
+      showAlert('Failed to share media. Please try again.', {
+        severity: 'error',
+      })
+    } finally {
+      setIsMessageSending(false)
     }
-
-    setIsMessageSending(true)
-    setMessageLog([...messageLog, unsentInlineMedia])
-
-    await sendPeerInlineMedia(unsentInlineMedia)
-
-    setMessageLog([
-      ...messageLog,
-      { ...unsentInlineMedia, timeReceived: timeService.now() },
-    ])
-    setIsMessageSending(false)
   }
 
   const handleMessageChange = () => {
@@ -605,7 +626,11 @@ export function useRoom(
 
   useEffect(() => {
     ;(async () => {
-      setPeerConnectionTypes(await peerRoom.getPeerConnectionTypes())
+      try {
+        setPeerConnectionTypes(await peerRoom.getPeerConnectionTypes())
+      } catch (e) {
+        console.error('Failed to get peer connection types:', e)
+      }
     })()
   }, [peerList, peerRoom, setPeerConnectionTypes])
 

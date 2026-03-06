@@ -6,6 +6,7 @@ import { useContext } from 'react'
 import { v4 as uuid } from 'uuid'
 
 import { ChatTranscript } from 'components/ChatTranscript'
+import { ErrorBoundary } from 'components/ErrorBoundary'
 import { WholePageLoading } from 'components/Loading'
 import { MessageForm } from 'components/MessageForm'
 import { trackerUrls } from 'config/trackerUrls'
@@ -163,11 +164,13 @@ const RoomCore = ({
             }}
           >
             {showVideoDisplay && (
-              <RoomVideoDisplay
-                userId={userId}
-                width="100%"
-                height={landscape || !showMessages ? '100%' : '60%'}
-              />
+              <ErrorBoundary>
+                <RoomVideoDisplay
+                  userId={userId}
+                  width="100%"
+                  height={landscape || !showMessages ? '100%' : '60%'}
+                />
+              </ErrorBoundary>
             )}
             {showMessages && (
               <Box

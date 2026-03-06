@@ -109,7 +109,7 @@ describe('Room', () => {
       </RouteStub>
     )
 
-    const sendButton = screen.getByLabelText('Send')
+    const sendButton = screen.getByRole('button', { name: 'Send' })
     expect(sendButton).toBeDisabled()
   })
 
@@ -120,8 +120,8 @@ describe('Room', () => {
       </RouteStub>
     )
 
-    const sendButton = screen.getByLabelText('Send')
-    const textInput = screen.getByPlaceholderText('Your message')
+    const sendButton = screen.getByRole('button', { name: 'Send' })
+    const textInput = screen.getByPlaceholderText('Type a message...')
 
     await userEvent.type(textInput, 'hello')
 
@@ -135,8 +135,8 @@ describe('Room', () => {
       </RouteStub>
     )
 
-    const sendButton = screen.getByLabelText('Send')
-    const textInput = screen.getByPlaceholderText('Your message')
+    const sendButton = screen.getByRole('button', { name: 'Send' })
+    const textInput = screen.getByPlaceholderText('Type a message...')
 
     await userEvent.type(textInput, 'hello')
     await userEvent.click(sendButton)
@@ -155,8 +155,8 @@ describe('Room', () => {
       </RouteStub>
     )
 
-    const sendButton = screen.getByLabelText('Send')
-    const textInput = screen.getByPlaceholderText('Your message')
+    const sendButton = screen.getByRole('button', { name: 'Send' })
+    const textInput = screen.getByPlaceholderText('Type a message...')
 
     await userEvent.type(textInput, 'hello')
     await userEvent.click(sendButton)
@@ -167,6 +167,7 @@ describe('Room', () => {
         text: 'hello',
         timeSent: mockNowTime,
         id: 'abc123',
+        deliveryStatus: 'sending',
       },
       null
     )

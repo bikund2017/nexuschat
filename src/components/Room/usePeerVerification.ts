@@ -53,7 +53,8 @@ export const usePeerVerification = ({
       const matchingPeer = peerList.find(peer => peer.peerId === peerId)
 
       if (!matchingPeer) {
-        throw new Error(`peerId not found: ${peerId}`)
+        console.error(`Verification failed: peerId not found: ${peerId}`)
+        return
       }
 
       const { verificationToken, verificationTimer } = matchingPeer
@@ -71,9 +72,10 @@ export const usePeerVerification = ({
           }
         )
 
-        throw new Error(
+        console.error(
           `Verification token for peerId ${peerId} does not match. [expected: ${verificationToken}] [received: ${decryptedVerificationToken}]`
         )
+        return
       }
 
       if (verificationTimer) {
