@@ -9,6 +9,7 @@ import {
   EnvironmentUnsupportedDialog,
   isEnvironmentSupported,
 } from 'components/Shell/EnvironmentUnsupportedDialog'
+import { ErrorBoundary } from 'components/ErrorBoundary'
 import { WholePageLoading } from 'components/Loading/Loading'
 import { ColorMode, UserSettings } from 'models/settings'
 
@@ -81,10 +82,12 @@ const Init = ({ getUuid = uuid, ...props }: InitProps) => {
   }
 
   return (
-    <Suspense fallback={<WholePageLoading />}>
-      <Bootstrap {...props} initialUserSettings={userSettings} />
-      <Analytics />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<WholePageLoading />}>
+        <Bootstrap {...props} initialUserSettings={userSettings} />
+        <Analytics />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 
