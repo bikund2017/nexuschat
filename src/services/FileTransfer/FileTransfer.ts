@@ -9,15 +9,25 @@ export class FileTransferService {
   fileTransfer: FileTransfer
 
   constructor(rtcConfig: RTCConfiguration) {
-    this.fileTransfer = new FileTransfer({
-      torrentOpts: {
-        announce: trackerUrls,
-      },
-      webtorrentInstanceOpts: {
-        tracker: {
-          rtcConfig,
+    try {
+      this.fileTransfer = new FileTransfer({
+        torrentOpts: {
+          announce: trackerUrls,
         },
-      },
-    })
+        webtorrentInstanceOpts: {
+          tracker: {
+            rtcConfig,
+          },
+        },
+      })
+    } catch (e) {
+      console.error('Failed to initialize FileTransferService:', e)
+      // Initialize with default config as fallback so the app doesn't crash
+      this.fileTransfer = new FileTransfer({
+        torrentOpts: {
+          announce: trackerUrls,
+        },
+      })
+    }
   }
 }

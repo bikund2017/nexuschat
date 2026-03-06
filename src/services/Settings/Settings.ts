@@ -11,6 +11,15 @@ class InvalidFileError extends Error {
   message = 'InvalidFileError: File could not be imported'
 }
 
+class InvalidKeyPairError extends Error {
+  message =
+    'InvalidKeyPairError: The public and private keys in the imported file are not compatible'
+}
+
+class FileReadError extends Error {
+  message = 'FileReadError: Unable to read the file contents'
+}
+
 const encryptionTestTarget = 'nexuschat'
 
 export class SettingsService {
@@ -29,18 +38,27 @@ export class SettingsService {
     const fileReader = new FileReader()
 
     const promise = new Promise<UserSettings>((resolve, reject) => {
+      fileReader.addEventListener('error', () => {
+        reject(new FileReadError())
+      })
+
       fileReader.addEventListener('loadend', async evt => {
         try {
           const fileReaderResult = evt.target?.result
 
           if (typeof fileReaderResult !== 'string') {
-            throw new Error()
+            throw new FileReadError()
           }
 
-          const parsedFileResult = JSON.parse(fileReaderResult)
+          let parsedFileResult: unknown
+          try {
+            parsedFileResult = JSON.parse(fileReaderResult)
+          } catch (_e) {
+            throw new InvalidFileError()
+          }
 
           if (!isSerializedUserSettings(parsedFileResult)) {
-            throw new Error()
+            throw new InvalidFileError()
           }
 
           const deserializedUserSettings =
@@ -59,14 +77,23 @@ export class SettingsService {
           // NOTE: This determines whether the public and private keys match
           // and are compatible with NexusChat.
           if (decryptedString !== encryptionTestTarget) {
-            throw new Error()
+            throw new InvalidKeyPairError()
           }
 
           resolve(deserializedUserSettings)
-        } catch (_e) {
-          const err = new InvalidFileError()
-          console.error(err)
-          reject(err)
+        } catch (e) {
+          if (
+            e instanceof InvalidFileError ||
+            e instanceof InvalidKeyPairError ||
+            e instanceof FileReadError
+          ) {
+            console.error(e)
+            reject(e)
+          } else {
+            const err = new InvalidFileError()
+            console.error(err, e)
+            reject(err)
+          }
         }
       })
 
