@@ -1,12 +1,10 @@
 import { Component, ErrorInfo, ReactNode } from 'react'
-import { Link } from 'react-router-dom'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CloseIcon from '@mui/icons-material/Close'
-
-import { routes } from 'config/routes'
 
 interface Props {
   children?: ReactNode
@@ -32,12 +30,20 @@ export class ErrorBoundary extends Component<Props, State> {
     console.error('Uncaught error:', error, errorInfo)
   }
 
+  private handleDismiss = () => {
+    this.setState({ error: null, showError: false })
+  }
+
+  private handleReload = () => {
+    window.location.href = '/'
+  }
+
   public render() {
     if (this.state.error && this.state.showError) {
       const { name, message, stack } = this.state.error
 
       return (
-        <Box>
+        <Box sx={{ p: 2 }}>
           <Alert
             severity="error"
             action={
@@ -45,23 +51,48 @@ export class ErrorBoundary extends Component<Props, State> {
                 aria-label="close"
                 color="inherit"
                 size="small"
-                onClick={() => {
-                  this.setState({ error: null, showError: false })
-                }}
+                onClick={this.handleDismiss}
               >
-                <Link to={routes.ROOT}>
-                  <CloseIcon fontSize="inherit" />
-                </Link>
+                <CloseIcon fontSize="inherit" />
               </IconButton>
             }
           >
-            <Typography variant="h2">
-              <pre>{name}</pre>
+            <Typography variant="h5" component="pre" sx={{ mb: 1 }}>
+              {name}
             </Typography>
-            <Typography variant="h3">
-              <code>{message}</code>
+            <Typography variant="body1" component="code" sx={{ mb: 1 }}>
+              {message}
             </Typography>
-            <pre>{stack}</pre>
+            {import.meta.env.DEV && stack && (
+              <Typography
+                variant="body2"
+                component="pre"
+                sx={{
+                  mt: 1,
+                  maxHeight: '300px',
+                  overflow: 'auto',
+                  fontSize: '0.75rem',
+                }}
+              >
+                {stack}
+              </Typography>
+            )}
+            <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={this.handleDismiss}
+              >
+                Dismiss
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={this.handleReload}
+              >
+                Reload App
+              </Button>
+            </Box>
           </Alert>
         </Box>
       )
