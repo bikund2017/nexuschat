@@ -1,8 +1,5 @@
 import { createContext, Dispatch } from 'react'
-import {
-  TransferState,
-  TransferAction,
-} from 'models/TransferState'
+import { TransferState, TransferAction } from 'models/TransferState'
 import { FileTransferService } from 'services/FileTransfer'
 
 export interface FileTransferContextProps {

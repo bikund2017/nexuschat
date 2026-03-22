@@ -8,10 +8,7 @@ import {
 } from 'react'
 
 import { FileTransferContext } from 'contexts/FileTransferContext'
-import {
-  TransferState,
-  transferReducer,
-} from 'models/TransferState'
+import { TransferState, transferReducer } from 'models/TransferState'
 import { FileTransferService } from 'services/FileTransfer'
 import {
   saveAllTransfers,
@@ -52,7 +49,11 @@ export function FileTransferProvider({
               t.status === 'encrypting' ||
               t.status === 'preparing'
             ) {
-              return { ...t, status: 'failed' as const, error: 'Transfer interrupted' }
+              return {
+                ...t,
+                status: 'failed' as const,
+                error: 'Transfer interrupted',
+              }
             }
             return t
           })
@@ -120,12 +121,9 @@ export function FileTransferProvider({
     )
   }, [])
 
-  const addTransfer = useCallback(
-    (transfer: TransferState) => {
-      dispatch({ type: 'ADD_TRANSFER', payload: transfer })
-    },
-    []
-  )
+  const addTransfer = useCallback((transfer: TransferState) => {
+    dispatch({ type: 'ADD_TRANSFER', payload: transfer })
+  }, [])
 
   const updateTransfer = useCallback(
     (id: string, updates: Partial<TransferState>) => {
@@ -134,19 +132,13 @@ export function FileTransferProvider({
     []
   )
 
-  const removeTransfer = useCallback(
-    (id: string) => {
-      dispatch({ type: 'REMOVE_TRANSFER', payload: id })
-    },
-    []
-  )
+  const removeTransfer = useCallback((id: string) => {
+    dispatch({ type: 'REMOVE_TRANSFER', payload: id })
+  }, [])
 
-  const getTransfer = useCallback(
-    (id: string) => {
-      return transfersRef.current.find(t => t.id === id)
-    },
-    []
-  )
+  const getTransfer = useCallback((id: string) => {
+    return transfersRef.current.find(t => t.id === id)
+  }, [])
 
   const clearCompleted = useCallback(() => {
     dispatch({ type: 'CLEAR_COMPLETED' })

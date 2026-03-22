@@ -1,10 +1,10 @@
 export interface ChunkBufferConfig {
-  chunkSize: number       // Size of each chunk in bytes (default: 64KB)
+  chunkSize: number // Size of each chunk in bytes (default: 64KB)
   maxBufferedChunks: number // Max chunks in-flight (default: 8)
   onProgress?: (bytesTransferred: number, totalBytes: number) => void
 }
 
-const DEFAULT_CHUNK_SIZE = 64 * 1024       // 64KB
+const DEFAULT_CHUNK_SIZE = 64 * 1024 // 64KB
 const DEFAULT_MAX_BUFFERED = 8
 
 export class ChunkBuffer {
@@ -37,7 +37,10 @@ export class ChunkBuffer {
 
   get progress(): number {
     if (this.totalBytes === 0) return 100
-    return Math.min(100, Math.round((this.bytesTransferred / this.totalBytes) * 100))
+    return Math.min(
+      100,
+      Math.round((this.bytesTransferred / this.totalBytes) * 100)
+    )
   }
 
   get transferred(): number {

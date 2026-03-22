@@ -33,6 +33,7 @@
     "fast-memoize": "^2.5.2",
     "file-saver": "^2.0.5",
     "fun-animal-names": "^0.1.1",
+    "idb": "^8.0.3",
     "idb-chunk-store": "^1.0.1",
     "localforage": "^1.10.0",
     "modern-normalize": "^2.0.0",

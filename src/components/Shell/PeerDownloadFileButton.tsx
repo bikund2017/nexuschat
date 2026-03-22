@@ -10,7 +10,7 @@ import { isError } from 'lib/type-guards'
 import { Peer } from 'models/chat'
 
 import { usePeerNameDisplay } from 'components/PeerNameDisplay/usePeerNameDisplay'
-import { RoomContext } from 'contexts/RoomContext'
+import { FileTransferContext } from 'contexts/FileTransferContext'
 
 interface PeerDownloadFileButtonProps {
   peer: Peer
@@ -24,7 +24,7 @@ export const PeerDownloadFileButton = ({
   const shellContext = useContext(ShellContext)
   const {
     fileTransferService: { fileTransfer },
-  } = useContext(RoomContext)
+  } = useContext(FileTransferContext)
   const { getDisplayUsername } = usePeerNameDisplay()
   const { offeredFileId } = peer
 

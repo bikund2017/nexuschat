@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { TorrentFile } from 'webtorrent'
 
-import { RoomContext } from 'contexts/RoomContext'
+import { FileTransferContext } from 'contexts/FileTransferContext'
 import { ShellContext } from 'contexts/ShellContext'
 
 type TorrentFiles = TorrentFile[]
@@ -85,7 +85,7 @@ export const InlineMedia = ({ magnetURI }: InlineMediaProps) => {
   const shellContext = useContext(ShellContext)
   const {
     fileTransferService: { fileTransfer },
-  } = useContext(RoomContext)
+  } = useContext(FileTransferContext)
 
   useEffect(() => {
     ;(async () => {

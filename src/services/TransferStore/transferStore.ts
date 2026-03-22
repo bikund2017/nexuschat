@@ -29,7 +29,9 @@ export async function saveTransfer(transfer: TransferState): Promise<void> {
   await db.put(STORE_NAME, transfer)
 }
 
-export async function getTransfer(id: string): Promise<TransferState | undefined> {
+export async function getTransfer(
+  id: string
+): Promise<TransferState | undefined> {
   const db = await getDB()
   return db.get(STORE_NAME, id)
 }
@@ -39,7 +41,9 @@ export async function getAllTransfers(): Promise<TransferState[]> {
   return db.getAll(STORE_NAME)
 }
 
-export async function getTransfersByRoom(roomId: string): Promise<TransferState[]> {
+export async function getTransfersByRoom(
+  roomId: string
+): Promise<TransferState[]> {
   const db = await getDB()
   return db.getAllFromIndex(STORE_NAME, 'roomId', roomId)
 }
@@ -68,7 +72,9 @@ export async function clearCompleted(): Promise<void> {
   await tx.done
 }
 
-export async function saveAllTransfers(transfers: TransferState[]): Promise<void> {
+export async function saveAllTransfers(
+  transfers: TransferState[]
+): Promise<void> {
   const db = await getDB()
   const tx = db.transaction(STORE_NAME, 'readwrite')
 
