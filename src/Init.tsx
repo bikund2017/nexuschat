@@ -12,6 +12,7 @@ import {
 import { ErrorBoundary } from 'components/ErrorBoundary'
 import { WholePageLoading } from 'components/Loading/Loading'
 import { ColorMode, UserSettings } from 'models/settings'
+import { FileTransferProvider } from 'providers/FileTransferProvider'
 
 import { DEFAULT_SOUND } from 'config/soundNames'
 
@@ -83,10 +84,12 @@ const Init = ({ getUuid = uuid, ...props }: InitProps) => {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={<WholePageLoading />}>
-        <Bootstrap {...props} initialUserSettings={userSettings} />
-        <Analytics />
-      </Suspense>
+      <FileTransferProvider>
+        <Suspense fallback={<WholePageLoading />}>
+          <Bootstrap {...props} initialUserSettings={userSettings} />
+          <Analytics />
+        </Suspense>
+      </FileTransferProvider>
     </ErrorBoundary>
   )
 }

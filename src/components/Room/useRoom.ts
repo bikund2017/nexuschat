@@ -37,7 +37,7 @@ import {
 } from 'models/chat'
 import { PeerAction } from 'models/network'
 import { AllowedKeyType, encryption } from 'services/Encryption'
-import { FileTransferService } from 'services/FileTransfer'
+import { FileTransferContext } from 'contexts/FileTransferContext'
 import { notification } from 'services/Notification'
 
 import { messageTranscriptSizeLimit } from 'config/messaging'
@@ -115,10 +115,7 @@ export function useRoom(
 
   const { getDisplayUsername } = usePeerNameDisplay()
 
-  const fileTransferService = useMemo(
-    () => new FileTransferService(roomConfig.rtcConfig ?? {}),
-    [roomConfig.rtcConfig]
-  )
+  const { fileTransferService } = useContext(FileTransferContext)
 
   const setMessageLog = (messages: Array<Message | InlineMedia>) => {
     if (messages.length > messageTranscriptSizeLimit) {
@@ -181,7 +178,7 @@ export function useRoom(
       setPeerScreenStreams,
       peerOfferedFileMetadata,
       setPeerOfferedFileMetadata,
-      fileTransferService,
+
     }),
     [
       isPrivate,
@@ -199,7 +196,7 @@ export function useRoom(
       setPeerScreenStreams,
       peerOfferedFileMetadata,
       setPeerOfferedFileMetadata,
-      fileTransferService,
+
     ]
   )
 
