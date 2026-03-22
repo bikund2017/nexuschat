@@ -2,6 +2,8 @@ let trackerUrls: string[] | undefined = [
   // WebTorrent tracker URLs for peer discovery.
   // These are provided to the peer-to-peer signaling layer.
   'wss://tracker.openwebtorrent.com',
+  'wss://tracker.btorrent.xyz',
+  'wss://tracker.webtorrent.dev',
   'wss://tracker.files.fm:7073/announce',
 ]
 

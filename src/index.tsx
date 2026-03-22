@@ -1,6 +1,6 @@
 import './polyfills'
 import ReactDOM from 'react-dom/client'
-import '@fontsource/roboto'
+import 'typeface-roboto'
 
 import 'modern-normalize/modern-normalize.css'
 import './index.css'

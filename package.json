@@ -79,8 +79,8 @@
     ]
   },
   "engines": {
-    "node": ">=20",
-    "npm": ">=10"
+    "node": "20.19.5",
+    "npm": "10.8.2"
   },
   "browserslist": {
     "production": [
@@ -145,19 +145,15 @@
       "react": "$react",
       "react-dom": "$react-dom"
     },
+    "resolve-url-loader": {
+      "postcss": "8.4.31"
+    },
     "secure-file-transfer": {
       "readable-web-to-node-stream": "3.0.2"
     },
     "eslint-config-react-app": {
       "@typescript-eslint/eslint-plugin": "^8.35.1",
-      "@typescript-eslint/parser": "^8.35.1",
-      "@babel/plugin-proposal-class-properties": "npm:@babel/plugin-transform-class-properties@latest",
-      "@babel/plugin-proposal-nullish-coalescing-operator": "npm:@babel/plugin-transform-nullish-coalescing-operator@latest",
-      "@babel/plugin-proposal-numeric-separator": "npm:@babel/plugin-transform-numeric-separator@latest",
-      "@babel/plugin-proposal-optional-chaining": "npm:@babel/plugin-transform-optional-chaining@latest",
-      "@babel/plugin-proposal-private-methods": "npm:@babel/plugin-transform-private-methods@latest",
-      "@babel/plugin-proposal-private-property-in-object": "npm:@babel/plugin-transform-private-property-in-object@latest"
-    },
-    "serialize-javascript": "^7.0.4"
+      "@typescript-eslint/parser": "^8.35.1"
+    }
   }
 }
