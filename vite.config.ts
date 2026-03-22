@@ -22,6 +22,7 @@ const srcPaths = [
   'lib',
   'models',
   'pages',
+  'providers',
   'services',
   'img',
   'utils',
