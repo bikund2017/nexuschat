@@ -37,7 +37,7 @@ const supportedMediaExtensions = [
 ]
 
 export const InlineFile = ({ file }: InlineFileProps) => {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [didRenderingMediaFail, setDidRenderingMediaFail] = useState(false)
   const [isMediaSupported, setIsMediaSupported] = useState(true)
   const shellContext = useContext(ShellContext)
@@ -48,7 +48,7 @@ export const InlineFile = ({ file }: InlineFileProps) => {
     if (!container) return
 
     const { name } = file
-    const fileNameExtension = name.split('.').pop() ?? ''
+    const fileNameExtension = name.split('.').pop()?.toLowerCase() ?? ''
 
     if (!supportedMediaExtensions.includes(`.${fileNameExtension}`)) {
       setIsMediaSupported(false)
@@ -56,6 +56,9 @@ export const InlineFile = ({ file }: InlineFileProps) => {
     }
 
     try {
+      while (container.firstChild) {
+        container.removeChild(container.firstChild)
+      }
       file.appendTo(container)
     } catch (e) {
       console.error(e)

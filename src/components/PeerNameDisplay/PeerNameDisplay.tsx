@@ -29,7 +29,7 @@ export const PeerNameDisplay = ({
   } else {
     return (
       <Typography component="span" {...rest}>
-        {getPeerName(userId)}
+        {friendlyName}
       </Typography>
     )
   }

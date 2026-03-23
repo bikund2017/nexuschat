@@ -47,38 +47,43 @@ const FeatureCard = ({
   return (
     <Box
       sx={{
-        p: { xs: 2, sm: 3 },
+        p: { xs: 2, md: 2.5 },
         borderRadius: 2,
-        textAlign: 'center',
-        background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
-        border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
-        cursor: 'default',
+        textAlign: 'left',
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 2,
+        background: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
+        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'}`,
       }}
     >
       <Box
         sx={{
-          display: 'inline-flex',
-          p: 1.5,
-          borderRadius: 2,
-          mb: 1.5,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 1.25,
+          borderRadius: 1.5,
           background: isDark
-            ? 'rgba(255, 255, 255, 0.06)'
+            ? 'rgba(255, 255, 255, 0.08)'
             : 'rgba(0, 0, 0, 0.04)',
           color: isDark ? '#D4D4D4' : '#404040',
         }}
       >
         {icon}
       </Box>
-      <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-        {title}
-      </Typography>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ lineHeight: 1.6 }}
-      >
-        {description}
-      </Typography>
+      <Box>
+        <Typography variant="subtitle2" component="h3" fontWeight={700} sx={{ mb: 0.5 }}>
+          {title}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ lineHeight: 1.4 }}
+        >
+          {description}
+        </Typography>
+      </Box>
     </Box>
   )
 }
@@ -117,54 +122,56 @@ export const Home = ({ userId }: HomeProps) => {
           maxWidth: theme.breakpoints.values.md,
           mt: 0,
           mx: 'auto',
-          px: { xs: 1.5, sm: 2 },
+          px: { xs: 1.5, sm: 2, md: 3 },
           textAlign: 'center',
         }}
       >
         {/* Hero Section */}
         <Box
           sx={{
-            py: { xs: 3, md: 7 },
-            px: { xs: 1, md: 2 },
+            py: { xs: 3, md: 5 },
             animation: 'fadeIn 0.5s ease-out',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <Box
             sx={{
               display: 'inline-flex',
-              mb: 3,
-              p: 2,
+              mb: 2,
+              p: 1.5,
               borderRadius: 3,
               background: isDark
                 ? 'rgba(255, 255, 255, 0.04)'
                 : 'rgba(0, 0, 0, 0.03)',
             }}
           >
-            <LogoIcon style={{ width: 48, height: 48 }} />
+            <LogoIcon style={{ width: 42, height: 42 }} />
           </Box>
           <Typography
             variant="h3"
             component="h1"
             sx={{
               fontWeight: 800,
-              mb: 2,
+              mb: 1.5,
               color: isDark ? '#FFFFFF' : '#171717',
-              fontSize: { xs: '2.2rem', md: '3rem' },
-              letterSpacing: '-0.03em',
+              fontSize: { xs: '2rem', md: '2.5rem' },
+              letterSpacing: '-0.02em',
             }}
           >
             NexusChat
           </Typography>
           <Typography
-            variant="h6"
+            variant="subtitle1"
             color="text.secondary"
             sx={{
-              maxWidth: 480,
+              maxWidth: 500,
               mx: 'auto',
-              mb: 1.5,
+              mb: 1,
               fontWeight: 400,
-              fontSize: { xs: '0.95rem', md: '1.1rem' },
-              lineHeight: 1.7,
+              fontSize: { xs: '1rem', md: '1.1rem' },
+              lineHeight: 1.6,
             }}
           >
             Secure peer-to-peer communication.
@@ -174,11 +181,11 @@ export const Home = ({ userId }: HomeProps) => {
           <Typography
             variant="body2"
             color="text.secondary"
-            sx={{ mb: 4, opacity: 0.6 }}
+            sx={{ mb: 4, opacity: 0.8 }}
           >
             Welcome,{' '}
             <strong>
-              <PeerNameDisplay>{customUsername || userId}</PeerNameDisplay>
+              <PeerNameDisplay>{userId}</PeerNameDisplay>
             </strong>
           </Typography>
         </Box>
@@ -186,18 +193,19 @@ export const Home = ({ userId }: HomeProps) => {
         {/* Room Creation Card */}
         <Box
           sx={{
-            maxWidth: 480,
+            maxWidth: 500,
             mx: 'auto',
-            mb: { xs: 3, md: 6 },
-            p: { xs: 2.5, md: 4 },
+            mb: { xs: 3, md: 4 },
+            p: { xs: 2.5, md: 3.5 },
             borderRadius: 3,
             background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
             border: `1px solid ${isDark ? '#262626' : '#E5E5E5'}`,
-            boxShadow: isDark ? 'none' : '0 1px 3px rgba(0, 0, 0, 0.04)',
+            boxShadow: isDark ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.04)',
             animation: 'slideUp 0.45s ease-out',
+            textAlign: 'left',
           }}
         >
-          <Typography variant="h6" fontWeight={600} sx={{ mb: 3 }}>
+          <Typography variant="h6" fontWeight={700} sx={{ mb: 2.5, textAlign: 'center' }}>
             Create or Join a Room
           </Typography>
 
@@ -209,18 +217,18 @@ export const Home = ({ userId }: HomeProps) => {
             size="small"
             sx={{ mb: 3 }}
           >
-            <ToggleButton value={RoomNameType.UUID} sx={{ py: 1 }}>
-              <LockOutlinedIcon sx={{ mr: 0.5, fontSize: '1.1rem' }} />
+            <ToggleButton value={RoomNameType.UUID} sx={{ py: 1, textTransform: 'none', fontWeight: 600 }}>
+              <LockOutlinedIcon sx={{ mr: 0.75, fontSize: '1.2rem' }} />
               Random ID
             </ToggleButton>
-            <ToggleButton value={RoomNameType.PASSPHRASE} sx={{ py: 1 }}>
-              <GroupsOutlinedIcon sx={{ mr: 0.5, fontSize: '1.1rem' }} />
+            <ToggleButton value={RoomNameType.PASSPHRASE} sx={{ py: 1, textTransform: 'none', fontWeight: 600 }}>
+              <GroupsOutlinedIcon sx={{ mr: 0.75, fontSize: '1.2rem' }} />
               Passphrase
             </ToggleButton>
           </ToggleButtonGroup>
 
           <Form onSubmit={handleFormSubmit}>
-            <FormControl fullWidth sx={{ mb: 2 }}>
+            <FormControl fullWidth sx={{ mb: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <TextField
                   label="Room name"
@@ -230,6 +238,9 @@ export const Home = ({ userId }: HomeProps) => {
                   fullWidth
                   size="small"
                   placeholder="Enter a room name..."
+                  sx={{
+                    '& .MuiOutlinedInput-root': { borderRadius: 2 }
+                  }}
                 />
                 <IconButton
                   onClick={regenerateRoomName}
@@ -237,9 +248,13 @@ export const Home = ({ userId }: HomeProps) => {
                   size="small"
                   sx={{
                     color: 'secondary.main',
+                    bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                    p: 1,
+                    borderRadius: 2,
                     '&:hover': {
                       transform: 'rotate(180deg)',
                       transition: 'transform 0.3s',
+                      bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
                     },
                   }}
                 >
@@ -255,10 +270,11 @@ export const Home = ({ userId }: HomeProps) => {
                 disabled={!isRoomNameValid}
                 onClick={handleJoinPublicRoomClick}
                 sx={{
-                  py: 1.5,
+                  py: 1.25,
                   borderRadius: 2,
                   fontWeight: 600,
-                  fontSize: '0.85rem',
+                  fontSize: '0.9rem',
+                  textTransform: 'none',
                 }}
               >
                 Join Public
@@ -270,10 +286,13 @@ export const Home = ({ userId }: HomeProps) => {
                 disabled={!isRoomNameValid}
                 onClick={handleJoinPrivateRoomClick}
                 sx={{
-                  py: 1.5,
+                  py: 1.25,
                   borderRadius: 2,
                   fontWeight: 600,
-                  fontSize: '0.85rem',
+                  fontSize: '0.9rem',
+                  textTransform: 'none',
+                  borderWidth: '2px',
+                  '&:hover': { borderWidth: '2px' }
                 }}
               >
                 Join Private
@@ -282,83 +301,78 @@ export const Home = ({ userId }: HomeProps) => {
           </Form>
         </Box>
 
-        {/* Feature Cards */}
-        <Box sx={{ mb: 5 }}>
-          <Typography
-            variant="subtitle1"
-            fontWeight={600}
-            sx={{
-              mb: 3,
-              opacity: 0.7,
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-              fontSize: '0.75rem',
-            }}
-          >
-            Why NexusChat?
-          </Typography>
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: {
-                xs: '1fr 1fr',
-                sm: 'repeat(auto-fit, minmax(200px, 1fr))',
-              },
-              gap: { xs: 1.5, sm: 2 },
-              justifyContent: 'center',
-            }}
-          >
-            <FeatureCard
-              icon={<SecurityOutlinedIcon />}
-              title="End-to-End Encrypted"
-              description="Messages are encrypted before leaving your device"
-            />
-            <FeatureCard
-              icon={<CloudOffOutlinedIcon />}
-              title="No Servers"
-              description="Direct peer-to-peer — nothing stored anywhere"
-            />
-            <FeatureCard
-              icon={<ChatBubbleOutlineIcon />}
-              title="Real-Time Chat"
-              description="Instant messaging with typing indicators"
-            />
-            <FeatureCard
-              icon={<DevicesOutlinedIcon />}
-              title="Cross-Platform"
-              description="Works on any modern browser, any device"
-            />
+        <Box sx={{ maxWidth: 500, mx: 'auto' }}>
+          {/* Community Rooms */}
+          <Box sx={{ mb: 4, animation: 'fadeIn 0.8s ease-out' }}>
+            <CommunityRoomSelector />
           </Box>
-        </Box>
 
-        {/* Community Rooms */}
-        <Box sx={{ mb: 4, animation: 'fadeIn 0.8s ease-out' }}>
-          <CommunityRoomSelector />
-        </Box>
+          {/* Feature Cards */}
+          <Box sx={{ mb: 5 }}>
+            <Typography
+              variant="overline"
+              fontWeight={700}
+              sx={{
+                display: 'block',
+                mb: 2,
+                opacity: 0.7,
+                letterSpacing: '0.05em',
+                textAlign: 'center'
+              }}
+            >
+              Why NexusChat?
+            </Typography>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  sm: '1fr 1fr',
+                },
+                gap: 2,
+              }}
+            >
+              <FeatureCard
+                icon={<SecurityOutlinedIcon />}
+                title="End-to-End Encrypted"
+                description="Messages are encrypted before leaving your device"
+              />
+              <FeatureCard
+                icon={<CloudOffOutlinedIcon />}
+                title="No Servers"
+                description="Direct peer-to-peer — nothing stored anywhere"
+              />
+              <FeatureCard
+                icon={<ChatBubbleOutlineIcon />}
+                title="Real-Time Chat"
+                description="Instant messaging with typing indicators"
+              />
+              <FeatureCard
+                icon={<DevicesOutlinedIcon />}
+                title="Cross-Platform"
+                description="Works on any modern browser, any device"
+              />
+            </Box>
+          </Box>
 
-        {/* Embed Control */}
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            justifyContent: 'center',
-            mb: 4,
-            flexWrap: 'wrap',
-          }}
-        >
-          <Button
-            variant="text"
-            size="small"
-            startIcon={<CodeOutlinedIcon />}
-            onClick={handleGetEmbedCodeClick}
-            sx={{
-              textTransform: 'none',
-              color: 'text.secondary',
-              fontSize: '0.8rem',
-            }}
-          >
-            Embed
-          </Button>
+          {/* Embed Control */}
+          <Box sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}>
+            <Button
+              variant="text"
+              size="small"
+              startIcon={<CodeOutlinedIcon />}
+              onClick={handleGetEmbedCodeClick}
+              sx={{
+                textTransform: 'none',
+                color: 'text.secondary',
+                fontSize: '0.85rem',
+                fontWeight: 500,
+                borderRadius: 2
+              }}
+            >
+              Embed Room
+            </Button>
+          </Box>
         </Box>
       </Main>
     </Box>

@@ -89,10 +89,10 @@ const getYouTubeVideoId = (videoUrl: string) => {
   const trimmedMessage = videoUrl.trim()
 
   const matchArray =
-    trimmedMessage.match(/https:\/\/www.youtube.com\/watch\?v=(\S{8,})$/) ||
-    trimmedMessage.match(/https:\/\/youtu.be\/(\S{8,})$/)
+    trimmedMessage.match(/(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?.*v=([^&\s]{11})/) ||
+    trimmedMessage.match(/(?:https?:\/\/)?(?:www\.)?youtu\.be\/([^?\s]{11})/)
 
-  return matchArray?.pop()
+  return matchArray ? matchArray[1] : undefined
 }
 
 const isYouTubeLink = (message: IMessage) => {
@@ -173,7 +173,11 @@ export const Message = ({ message, showAuthor, userId }: MessageProps) => {
           {isInlineMedia(message) ? (
             <InlineMedia magnetURI={message.magnetURI} />
           ) : isYouTubeLink(message) ? (
-            <YouTube videoId={getYouTubeVideoId(message.text)} />
+            <YouTube
+              videoId={getYouTubeVideoId(message.text)}
+              opts={{ width: '100%', playerVars: { origin: window.location.origin } }}
+              style={{ maxWidth: '100%', borderRadius: '8px', overflow: 'hidden' }}
+            />
           ) : (
             <StyledMarkdown
               components={componentMap}

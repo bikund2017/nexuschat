@@ -37,7 +37,7 @@ export const usePeerNameDisplay = () => {
     if (customUsername === friendlyName) {
       displayUsername = `${friendlyName} (${getPeerName(userId)})`
     } else {
-      displayUsername = getPeerName(userId)
+      displayUsername = friendlyName
     }
 
     return displayUsername
