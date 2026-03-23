@@ -27,6 +27,9 @@ export class ConnectionTest extends EventTarget {
   rtcPeerConnection?: RTCPeerConnection
   rtcConfig: RTCConfiguration
 
+  private hasHostCheckTimeout?: ReturnType<typeof setTimeout>
+  private hasTURNServerCheckTimeout?: ReturnType<typeof setTimeout>
+
   constructor(rtcConfig: RTCConfiguration) {
     super()
     this.rtcConfig = rtcConfig
@@ -41,7 +44,7 @@ export class ConnectionTest extends EventTarget {
       iceServers,
     })
 
-    const hasHostCheckTimeout = setTimeout(() => {
+    this.hasHostCheckTimeout = setTimeout(() => {
       this.hasHost = false
 
       this.dispatchEvent(
@@ -51,7 +54,7 @@ export class ConnectionTest extends EventTarget {
       )
     }, checkExperationTime)
 
-    const hasTURNServerCheckTimeout = setTimeout(() => {
+    this.hasTURNServerCheckTimeout = setTimeout(() => {
       this.hasTURNServer = false
 
       this.dispatchEvent(
@@ -68,13 +71,13 @@ export class ConnectionTest extends EventTarget {
 
         switch (parsedCandidate.type) {
           case 'host':
-            clearTimeout(hasHostCheckTimeout)
+            clearTimeout(this.hasHostCheckTimeout)
             this.hasHost = window.navigator.onLine
             eventType = ConnectionTestEvents.HAS_HOST_CHANGED
             break
 
           case 'relay':
-            clearTimeout(hasTURNServerCheckTimeout)
+            clearTimeout(this.hasTURNServerCheckTimeout)
             this.hasTURNServer = window.navigator.onLine
             eventType = ConnectionTestEvents.HAS_RELAY_CHANGED
             break
@@ -105,6 +108,8 @@ export class ConnectionTest extends EventTarget {
   }
 
   destroyRtcPeerConnectionTest() {
+    clearTimeout(this.hasHostCheckTimeout)
+    clearTimeout(this.hasTURNServerCheckTimeout)
     this.rtcPeerConnection?.close()
   }
 

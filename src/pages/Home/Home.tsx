@@ -108,7 +108,7 @@ export const Home = ({ userId }: HomeProps) => {
   } = useHome()
 
   const { getUserSettings } = useContext(SettingsContext)
-  const { customUsername } = getUserSettings()
+  getUserSettings()
 
   return (
     <Box className="Home">

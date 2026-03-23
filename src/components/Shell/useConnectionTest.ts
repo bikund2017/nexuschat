@@ -39,8 +39,12 @@ export const useConnectionTest = () => {
       return
     }
 
+    let isMounted = true
+    let activeConnectionTest: ConnectionTest | null = null
+
     const checkRtcConnection = async () => {
       const connectionTest = new ConnectionTest(turnConfig)
+      activeConnectionTest = connectionTest
 
       const handleHasHostChanged = ((event: ConnectionTestEvent) => {
         setHasHost(event.detail.hasHost)
@@ -93,14 +97,14 @@ export const useConnectionTest = () => {
     }
 
     ;(async () => {
-      while (true) {
+      while (isMounted) {
         const connectionTest = await checkRtcConnection()
         await sleep(rtcPollInterval)
         connectionTest.destroyRtcPeerConnectionTest()
       }
     })()
     ;(async () => {
-      while (true) {
+      while (isMounted) {
         try {
           const connectionTest = new ConnectionTest(turnConfig)
           const trackerConnectionTestResult =
@@ -114,6 +118,13 @@ export const useConnectionTest = () => {
         await sleep(trackerPollInterval)
       }
     })()
+
+    return () => {
+      isMounted = false
+      if (activeConnectionTest) {
+        activeConnectionTest.destroyRtcPeerConnectionTest()
+      }
+    }
   }, [turnConfig, isConfigLoading])
 
   return {
