@@ -1,6 +1,5 @@
 /// <reference types="vitest" />
 import path from 'path'
-
 import { fileURLToPath } from 'url'
 
 import { defineConfig } from 'vite'
@@ -14,7 +13,10 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 import { manifest } from './manifest'
 import { RouterType } from './src/models/router'
 
-const srcPaths = [
+// -----------------------------
+// Constants
+// -----------------------------
+const SRC_DIRS = [
   'components',
   'hooks',
   'config',
@@ -29,19 +31,44 @@ const srcPaths = [
   'test-utils',
 ]
 
-const srcPathAliases = srcPaths.reduce((acc, dir) => {
-  acc[dir] = path.resolve(__dirname, `./src/${dir}`)
-  return acc
-}, {})
+const ONE_YEAR = 60 * 60 * 24 * 365
 
-const config = () => {
-  return defineConfig({
+// -----------------------------
+// Helpers
+// -----------------------------
+const createAliases = () =>
+  Object.fromEntries(
+    SRC_DIRS.map(dir => [dir, path.resolve(__dirname, `./src/${dir}`)])
+  )
+
+const fontCacheRule = (urlPattern: RegExp, cacheName: string) => ({
+  urlPattern,
+  handler: 'CacheFirst' as const,
+  options: {
+    cacheName,
+    expiration: {
+      maxEntries: 10,
+      maxAgeSeconds: ONE_YEAR,
+    },
+    cacheableResponse: {
+      statuses: [0, 200],
+    },
+  },
+})
+
+// -----------------------------
+// Config
+// -----------------------------
+export default defineConfig(() => {
+  const isE2E = process.env.IS_E2E_TEST
+
+  return {
     server: {
       https: true,
       host: true,
       proxy: {
         '/api': {
-          target: process.env.IS_E2E_TEST
+          target: isE2E
             ? 'http://localhost:3003'
             : 'http://localhost:3001',
           changeOrigin: true,
@@ -49,19 +76,22 @@ const config = () => {
         },
       },
     },
+
     build: {
-      // NOTE: This isn't really working. At the very least, it's still useful
-      // for exposing source code to users.
-      // See: https://github.com/vitejs/vite/issues/15012#issuecomment-1956429165
+      // Known limitation in Vite (see linked issue)
       sourcemap: true,
     },
+
     plugins: [
       basicSsl(),
+
       svgr({
         include: '**/*.svg?react',
       }),
+
       react(),
       macrosPlugin(),
+
       nodePolyfills({
         globals: {
           Buffer: true,
@@ -70,51 +100,34 @@ const config = () => {
         },
         protocolImports: true,
       }),
+
       VitePWA({
         registerType: 'prompt',
-        devOptions: {
-          enabled: false,
-        },
         injectRegister: 'auto',
         filename: 'service-worker.js',
         manifest,
+
+        devOptions: {
+          enabled: false,
+        },
+
         workbox: {
-          // Cache app shell and static assets
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-          // Runtime caching for Google Fonts
+
           runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'google-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-                },
-                cacheableResponse: {
-                  statuses: [0, 200],
-                },
-              },
-            },
-            {
-              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'gstatic-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-                },
-                cacheableResponse: {
-                  statuses: [0, 200],
-                },
-              },
-            },
+            fontCacheRule(
+              /^https:\/\/fonts\.googleapis\.com\/.*/i,
+              'google-fonts-cache'
+            ),
+            fontCacheRule(
+              /^https:\/\/fonts\.gstatic\.com\/.*/i,
+              'gstatic-fonts-cache'
+            ),
           ],
         },
       }),
     ],
+
     resolve: {
       alias: {
         webtorrent: fileURLToPath(
@@ -123,24 +136,26 @@ const config = () => {
             import.meta.url
           )
         ),
-        ...srcPathAliases,
+        ...createAliases(),
       },
     },
+
     test: {
       watch: false,
       globals: true,
       environment: 'jsdom',
       setupFiles: './src/setupTests.ts',
+
       exclude: ['**/e2e/**', '**/node_modules/**'],
+
       coverage: {
         reporter: ['text', 'html'],
         exclude: ['node_modules/', 'src/setupTests.ts'],
       },
+
       env: {
         VITE_ROUTER_TYPE: RouterType.BROWSER,
       },
     },
-  })
-}
-
-export default config
+  }
+})
