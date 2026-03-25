@@ -87,7 +87,7 @@ export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
       <Box component="nav" aria-label="Navigation menu">
         <List>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to={routes.ROOT}>
+            <ListItemButton component={Link} to={routes.ROOT} onClick={onDrawerClose}>
               <ListItemIcon>
                 <Home />
               </ListItemIcon>
@@ -95,7 +95,7 @@ export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to={routes.SETTINGS}>
+            <ListItemButton component={Link} to={routes.SETTINGS} onClick={onDrawerClose}>
               <ListItemIcon>
                 <SettingsApplications />
               </ListItemIcon>
@@ -103,7 +103,7 @@ export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to={routes.ABOUT}>
+            <ListItemButton component={Link} to={routes.ABOUT} onClick={onDrawerClose}>
               <ListItemIcon>
                 <QuestionMark />
               </ListItemIcon>
@@ -111,7 +111,7 @@ export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to={routes.DISCLAIMER}>
+            <ListItemButton component={Link} to={routes.DISCLAIMER} onClick={onDrawerClose}>
               <ListItemIcon>
                 <ReportIcon />
               </ListItemIcon>
@@ -119,7 +119,7 @@ export const Drawer = ({ isDrawerOpen, onDrawerClose }: DrawerProps) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={handleColorModeToggleClick}>
+            <ListItemButton onClick={() => { handleColorModeToggleClick(); onDrawerClose(); }}>
               <ListItemIcon>
                 {theme.palette.mode === 'dark' ? (
                   <Brightness7Icon />
