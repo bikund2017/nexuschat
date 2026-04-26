@@ -31,9 +31,14 @@ export function FileTransferProvider({
   // Keep ref in sync for use in event handlers
   transfersRef.current = transfers
 
+  // JSON.stringify provides a stable value-based key so the service is
+  // recreated whenever the actual ICE server list changes (e.g., when TURN
+  // credentials arrive), rather than only when the object reference changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fileTransferService = useMemo(
     () => new FileTransferService(rtcConfig),
-    [rtcConfig]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(rtcConfig)]
   )
 
   // Load persisted transfers on mount

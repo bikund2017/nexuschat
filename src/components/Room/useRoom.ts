@@ -293,9 +293,33 @@ export function useRoom(
         AllowedKeyType.PUBLIC
       )
 
-      const peerIndex = peerList.findIndex(peer => peer.peerId === peerId)
+      // IMPORTANT: The existence check is done inside the functional updater
+      // (reading `prev`) rather than from the stale `peerList` closure.
+      // This prevents the same peer being added twice when metadata packets
+      // arrive in rapid succession or React re-renders between arrivals.
+      setPeerList(prev => {
+        const peerIndex = prev.findIndex(peer => peer.peerId === peerId)
 
-      if (peerIndex === -1) {
+        if (peerIndex !== -1) {
+          // Peer already exists — update mutable fields only
+          const oldUsername =
+            prev[peerIndex].customUsername || getPeerName(prev[peerIndex].userId)
+          const newUsername = peerCustomUsername || getPeerName(peerUserId)
+
+          if (oldUsername !== newUsername) {
+            showAlert(`${oldUsername} is now ${newUsername}`)
+          }
+
+          const newPeerList = [...prev]
+          newPeerList[peerIndex] = {
+            ...newPeerList[peerIndex],
+            userId: peerUserId,
+            customUsername: peerCustomUsername,
+          }
+          return newPeerList
+        }
+
+        // Brand-new peer
         const newPeer: Peer = {
           peerId,
           userId: peerUserId,
@@ -316,30 +340,14 @@ export function useRoom(
           verificationTimer: null,
         }
 
-        setPeerList(prev => [...prev, newPeer])
-        sendTypingStatusChange({ isTyping }, peerId)
-        verifyPeer(newPeer)
-      } else {
-        const oldUsername =
-          peerList[peerIndex].customUsername || getPeerName(peerUserId)
-        const newUsername = peerCustomUsername || getPeerName(peerUserId)
+        // Fire side-effects after state update — safe to call outside updater
+        setTimeout(() => {
+          sendTypingStatusChange({ isTyping }, peerId)
+          verifyPeer(newPeer)
+        }, 0)
 
-        setPeerList(prev => {
-          const newPeerList = [...prev]
-          const newPeer = {
-            ...newPeerList[peerIndex],
-            userId: peerUserId,
-            customUsername: peerCustomUsername,
-          }
-          newPeerList[peerIndex] = newPeer
-
-          return newPeerList
-        })
-
-        if (oldUsername !== newUsername) {
-          showAlert(`${oldUsername} is now ${newUsername}`)
-        }
-      }
+        return [...prev, newPeer]
+      })
     },
   })
 

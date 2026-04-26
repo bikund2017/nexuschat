@@ -25,6 +25,7 @@ import { RoomVideoControls } from './RoomVideoControls'
 import { RoomVideoDisplay } from './RoomVideoDisplay'
 import { TypingStatusBar } from './TypingStatusBar'
 import { useRoom } from './useRoom'
+import { FileTransferProvider } from 'providers/FileTransferProvider'
 
 export interface RoomProps {
   appId?: string
@@ -221,5 +222,14 @@ export const Room = (props: RoomProps) => {
     return <WholePageLoading />
   }
 
-  return <RoomCore {...props} turnConfig={turnConfig} />
+  // FileTransferProvider is placed HERE (after useTurnConfig resolves) so that
+  // the WebTorrent / secure-file-transfer layer gets the same STUN/TURN ICE
+  // servers as the trystero signaling layer. Without this, file downloads and
+  // inline media would be stuck loading on the receiver side whenever peers
+  // are behind NAT.
+  return (
+    <FileTransferProvider rtcConfig={turnConfig}>
+      <RoomCore {...props} turnConfig={turnConfig} />
+    </FileTransferProvider>
+  )
 }
