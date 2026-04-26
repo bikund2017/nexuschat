@@ -138,74 +138,121 @@ const extractTurnServer = (
   return null
 }
 
-// Load and extract TURN server from environment variable
-const getTurnServer = (): RTCIceServer => {
-  const rtcConfigEnv = process.env.RTC_CONFIG
+/**
+ * Fetch fresh TURN credentials from the Metered API.
+ * Metered credentials are time-limited, so we must fetch them dynamically
+ * instead of serving the stale credentials baked into RTC_CONFIG.
+ */
+const fetchTurnServerFromMetered = async (): Promise<RTCIceServer | null> => {
+  const apiKey = process.env.TURN_METERED_API_KEY
+  const endpoint = process.env.TURN_METERED_ENDPOINT
 
-  if (!rtcConfigEnv) {
+  if (!apiKey || !endpoint) {
     console.warn(
-      'RTC_CONFIG environment variable is not set. Using fallback TURN server.'
+      'TURN_METERED_API_KEY or TURN_METERED_ENDPOINT not set. Skipping Metered API fetch.'
     )
-    return fallbackTurnServer
-  }
-
-  if (!rtcConfigEnv.trim()) {
-    console.error(
-      'RTC_CONFIG environment variable is empty. Using fallback TURN server.'
-    )
-    return fallbackTurnServer
+    return null
   }
 
   try {
-    // Base64 decode the environment variable
+    const url = `${endpoint}?apiKey=${encodeURIComponent(apiKey)}`
+    const response = await fetch(url, {
+      headers: { Accept: 'application/json' },
+    })
+
+    if (!response.ok) {
+      console.error(
+        `Metered API returned ${response.status} ${response.statusText}. Falling back to static config.`
+      )
+      return null
+    }
+
+    const servers: RTCIceServer[] = await response.json()
+
+    if (!Array.isArray(servers) || servers.length === 0) {
+      console.error('Metered API returned empty or invalid server list.')
+      return null
+    }
+
+    // Pick the first TURN server from the list (prefer TURN over STUN)
+    const turnServer = servers.find(s => {
+      const urls = Array.isArray(s.urls) ? s.urls : [s.urls]
+      return urls.some(
+        (u): u is string => typeof u === 'string' && u.startsWith('turn:')
+      )
+    })
+
+    if (!turnServer) {
+      console.error('No TURN server found in Metered API response.')
+      return null
+    }
+
+    // Return all URLs from metered (they bundle STUN+TURN together)
+    console.log('Successfully fetched fresh TURN credentials from Metered API.')
+    // Build a single RTCIceServer with all TURN-related URLs from metered
+    const allTurnUrls = servers.flatMap(s =>
+      (Array.isArray(s.urls) ? s.urls : [s.urls]).filter(
+        (u): u is string => typeof u === 'string' && isValidIceServerUrl(u)
+      )
+    )
+
+    return {
+      urls: allTurnUrls,
+      username: turnServer.username,
+      credential: turnServer.credential,
+    } as RTCIceServer
+  } catch (error) {
+    console.error('Error fetching TURN server from Metered API:', error)
+    return null
+  }
+}
+
+// Load and extract TURN server from the static RTC_CONFIG environment variable
+const getTurnServerFromStaticConfig = (): RTCIceServer | null => {
+  const rtcConfigEnv = process.env.RTC_CONFIG
+
+  if (!rtcConfigEnv || !rtcConfigEnv.trim()) {
+    return null
+  }
+
+  try {
     const decodedConfig = Buffer.from(rtcConfigEnv, 'base64').toString('utf-8')
 
-    if (!decodedConfig.trim()) {
-      console.error(
-        'RTC_CONFIG environment variable decodes to empty string. Using fallback TURN server.'
-      )
-      return fallbackTurnServer
-    }
+    if (!decodedConfig.trim()) return null
 
     const parsedConfig = JSON.parse(decodedConfig)
 
-    // Validate the parsed configuration
-    if (!isValidRTCConfiguration(parsedConfig)) {
-      console.error(
-        'Invalid RTC configuration format in environment variable. Configuration must conform to RTCConfiguration interface. Using fallback TURN server.'
-      )
-      return fallbackTurnServer
-    }
+    if (!isValidRTCConfiguration(parsedConfig)) return null
 
-    // Extract TURN server from the configuration
     const turnServer = extractTurnServer(parsedConfig)
-    if (!turnServer) {
-      console.error(
-        'No TURN server found in RTC configuration. Using fallback TURN server.'
-      )
-      return fallbackTurnServer
+    if (turnServer) {
+      console.log('Loaded TURN server configuration from static RTC_CONFIG.')
     }
-
-    console.log(
-      'Successfully loaded TURN server configuration from environment'
-    )
     return turnServer
   } catch (error) {
-    if (error instanceof SyntaxError) {
-      console.error(
-        'Failed to parse RTC_CONFIG environment variable as JSON:',
-        error.message,
-        'Using fallback TURN server.'
-      )
-    } else {
-      console.error(
-        'Unexpected error processing RTC_CONFIG environment variable:',
-        error,
-        'Using fallback TURN server.'
-      )
-    }
-    return fallbackTurnServer
+    console.error('Failed to parse static RTC_CONFIG:', error)
+    return null
   }
+}
+
+/**
+ * Get TURN server with priority:
+ * 1. Fresh credentials from Metered API (always up-to-date)
+ * 2. Static RTC_CONFIG env var (may be expired)
+ * 3. Hardcoded fallback
+ */
+const getTurnServer = async (): Promise<RTCIceServer> => {
+  // Try Metered API first — credentials are time-limited and must be fresh
+  const meteredServer = await fetchTurnServerFromMetered()
+  if (meteredServer) return meteredServer
+
+  // Fall back to static config (may be expired if credentials are old)
+  const staticServer = getTurnServerFromStaticConfig()
+  if (staticServer) return staticServer
+
+  // Last resort: hardcoded fallback
+  console.warn('Using hardcoded fallback TURN server.')
+  return fallbackTurnServer
 }
 
 const allowedOrigins = [
@@ -249,8 +296,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
   try {
-    // Get TURN server from environment variable with validation
-    const turnServer = getTurnServer()
+    // Get TURN server — tries Metered API first for fresh credentials,
+    // then falls back to static RTC_CONFIG, then hardcoded fallback.
+    const turnServer = await getTurnServer()
 
     // Set content type explicitly
     res.setHeader('Content-Type', 'application/json')
