@@ -48,7 +48,15 @@ describe('useTurnConfig', () => {
     vi.restoreAllMocks()
   })
 
-  test('fetches TURN server successfully', async () => {
+  // The baseline STUN servers always included in iceServers
+  const stunServers = [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun.cloudflare.com:3478' },
+    { urls: 'stun:stunserver.stunprotocol.org:3478' },
+  ]
+
+  test('fetches TURN server successfully and adds it after STUN servers', async () => {
     const queryClient = createTestQueryClient()
     const wrapper = createWrapper(queryClient)
 
@@ -67,8 +75,9 @@ describe('useTurnConfig', () => {
     })
 
     expect(result.current.isError).toBe(false)
+    // STUN servers are always first, then TURN server is appended
     expect(result.current.turnConfig).toEqual({
-      iceServers: [mockTurnServer],
+      iceServers: [...stunServers, mockTurnServer],
     })
     expect(global.fetch).toHaveBeenCalledWith('/api/get-config', {
       signal: expect.any(AbortSignal),
@@ -78,7 +87,7 @@ describe('useTurnConfig', () => {
     })
   })
 
-  test('returns empty iceServers when API fails', async () => {
+  test('returns only STUN servers when API fails', async () => {
     const queryClient = createTestQueryClient()
     const wrapper = createWrapper(queryClient)
 
@@ -94,10 +103,11 @@ describe('useTurnConfig', () => {
     )
 
     expect(result.current.isError).toBe(true)
-    expect(result.current.turnConfig).toEqual({ iceServers: [] })
+    // STUN servers are always present even when TURN fetch fails
+    expect(result.current.turnConfig).toEqual({ iceServers: stunServers })
   })
 
-  test('returns empty iceServers when API returns non-200 status', async () => {
+  test('returns only STUN servers when API returns non-200 status', async () => {
     const queryClient = createTestQueryClient()
     const wrapper = createWrapper(queryClient)
 
@@ -120,10 +130,11 @@ describe('useTurnConfig', () => {
     )
 
     expect(result.current.isError).toBe(true)
-    expect(result.current.turnConfig).toEqual({ iceServers: [] })
+    // STUN servers are always present even when TURN API returns error
+    expect(result.current.turnConfig).toEqual({ iceServers: stunServers })
   })
 
-  test('returns empty iceServers when API returns non-JSON content', async () => {
+  test('returns only STUN servers when API returns non-JSON content', async () => {
     const queryClient = createTestQueryClient()
     const wrapper = createWrapper(queryClient)
 
@@ -145,10 +156,11 @@ describe('useTurnConfig', () => {
     )
 
     expect(result.current.isError).toBe(true)
-    expect(result.current.turnConfig).toEqual({ iceServers: [] })
+    // STUN servers are always present even when TURN API returns wrong content type
+    expect(result.current.turnConfig).toEqual({ iceServers: stunServers })
   })
 
-  test('returns empty iceServers when API returns invalid RTCIceServer object', async () => {
+  test('returns only STUN servers when API returns invalid RTCIceServer object', async () => {
     const queryClient = createTestQueryClient()
     const wrapper = createWrapper(queryClient)
 
@@ -170,10 +182,11 @@ describe('useTurnConfig', () => {
     )
 
     expect(result.current.isError).toBe(true)
-    expect(result.current.turnConfig).toEqual({ iceServers: [] })
+    // STUN servers are always present even when TURN API returns invalid data
+    expect(result.current.turnConfig).toEqual({ iceServers: stunServers })
   })
 
-  test('accepts valid RTCIceServer object with urls as array', async () => {
+  test('accepts valid RTCIceServer object with urls as array and appends after STUN', async () => {
     const queryClient = createTestQueryClient()
     const wrapper = createWrapper(queryClient)
 
@@ -201,13 +214,13 @@ describe('useTurnConfig', () => {
     })
 
     expect(result.current.isError).toBe(false)
-    expect(result.current.turnConfig.iceServers).toBeDefined()
-    expect(result.current.turnConfig.iceServers![0]).toEqual(
-      validTurnServerWithArray
-    )
+    const servers = result.current.turnConfig.iceServers!
+    // STUN servers come first, TURN server is appended at the end
+    expect(servers.slice(0, stunServers.length)).toEqual(stunServers)
+    expect(servers[stunServers.length]).toEqual(validTurnServerWithArray)
   })
 
-  test('accepts valid RTCIceServer object with minimal properties (only urls)', async () => {
+  test('accepts valid RTCIceServer object with minimal properties (only urls) and appends after STUN', async () => {
     const queryClient = createTestQueryClient()
     const wrapper = createWrapper(queryClient)
 
@@ -230,8 +243,10 @@ describe('useTurnConfig', () => {
     })
 
     expect(result.current.isError).toBe(false)
-    expect(result.current.turnConfig.iceServers).toBeDefined()
-    expect(result.current.turnConfig.iceServers![0]).toEqual(minimalTurnServer)
+    const servers = result.current.turnConfig.iceServers!
+    // STUN servers come first, TURN server is appended at the end
+    expect(servers.slice(0, stunServers.length)).toEqual(stunServers)
+    expect(servers[stunServers.length]).toEqual(minimalTurnServer)
   })
 
   test('uses custom RTC config endpoint from environment variable', async () => {
@@ -262,8 +277,9 @@ describe('useTurnConfig', () => {
         Accept: 'application/json',
       },
     })
+    // STUN servers come first, then the fetched TURN server
     expect(result.current.turnConfig).toEqual({
-      iceServers: [mockTurnServer],
+      iceServers: [...stunServers, mockTurnServer],
     })
   })
 
@@ -298,12 +314,13 @@ describe('useTurnConfig', () => {
         },
       }
     )
+    // STUN servers come first, then the fetched TURN server
     expect(result.current.turnConfig).toEqual({
-      iceServers: [mockTurnServer],
+      iceServers: [...stunServers, mockTurnServer],
     })
   })
 
-  test('skips API request when enableApiRequest is false', () => {
+  test('skips API request when enableApiRequest is false, returns only STUN servers', () => {
     const queryClient = createTestQueryClient()
     const wrapper = createWrapper(queryClient)
 
@@ -314,10 +331,11 @@ describe('useTurnConfig', () => {
     expect(global.fetch).not.toHaveBeenCalled()
     expect(result.current.isLoading).toBe(false)
     expect(result.current.isError).toBe(false)
-    expect(result.current.turnConfig).toEqual({ iceServers: [] })
+    // STUN servers are always present even when API request is disabled
+    expect(result.current.turnConfig).toEqual({ iceServers: stunServers })
   })
 
-  test('skips API request when enhanced connectivity is not available', () => {
+  test('skips API request when enhanced connectivity is not available, returns only STUN servers', () => {
     mockEnhancedConnectivity.isEnhancedConnectivityAvailable = false
 
     const queryClient = createTestQueryClient()
@@ -330,6 +348,7 @@ describe('useTurnConfig', () => {
     expect(global.fetch).not.toHaveBeenCalled()
     expect(result.current.isLoading).toBe(false)
     expect(result.current.isError).toBe(false)
-    expect(result.current.turnConfig).toEqual({ iceServers: [] })
+    // STUN servers are always present even when enhanced connectivity is disabled
+    expect(result.current.turnConfig).toEqual({ iceServers: stunServers })
   })
 })
