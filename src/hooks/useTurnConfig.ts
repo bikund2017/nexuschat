@@ -213,9 +213,18 @@ export const useTurnConfig = (
 
   // Merge TURN server from API
   const turnConfig = useMemo((): RTCConfiguration => {
-    const iceServers: RTCIceServer[] = []
+    // Free public STUN servers — always included as baseline.
+    // STUN just helps peers discover their public IP/port, uses no bandwidth,
+    // and enables direct P2P for ~80% of users (home broadband, etc.).
+    // Users behind strict symmetric NAT (mobile 4G, corporate) still need TURN.
+    const iceServers: RTCIceServer[] = [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      { urls: 'stun:stun.cloudflare.com:3478' },
+      { urls: 'stun:stunserver.stunprotocol.org:3478' },
+    ]
 
-    // Only include TURN server if we have one from API
+    // Add TURN server on top of STUN if available (required for strict NAT users)
     if (isEnhancedConnectivityAvailable && enableApiRequest && turnServer) {
       iceServers.push(turnServer)
     }
