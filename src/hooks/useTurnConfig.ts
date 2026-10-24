@@ -94,19 +94,16 @@ const getApiUrl = (endpoint: string): string => {
 const fetchTurnServer = async (): Promise<RTCIceServer> => {
   const endpoint = getRtcConfigEndpoint()
   const apiUrl = getApiUrl(endpoint)
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 10000)
 
   try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
-
     const response = await fetch(apiUrl, {
       signal: controller.signal,
       headers: {
         Accept: 'application/json',
       },
     })
-
-    clearTimeout(timeoutId)
 
     if (!response.ok) {
       const errorMessage = `TURN server API request failed: ${response.status} ${response.statusText}`
@@ -158,6 +155,8 @@ const fetchTurnServer = async (): Promise<RTCIceServer> => {
 
     console.error('Error fetching TURN server:', error)
     throw error
+  } finally {
+    clearTimeout(timeoutId)
   }
 }
 
