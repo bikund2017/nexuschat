@@ -5,6 +5,8 @@ let trackerUrls: string[] | undefined = [
   'wss://tracker.btorrent.xyz',
   'wss://tracker.webtorrent.dev',
   'wss://tracker.files.fm:7073/announce',
+  'wss://tracker.novage.com.ua',
+  'wss://tracker.magnetoo.io/announce',
 ]
 
 // If a tracker URL has been provided via the VITE_TRACKER_URL environment
